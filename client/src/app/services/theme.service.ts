@@ -1,10 +1,10 @@
-import { Injectable, inject, signal, effect } from "@angular/core";
+import { effect, inject, Injectable, signal } from "@angular/core";
 import { StorageService } from "./storage.service";
 
 export type ThemeMode = "auto" | "light" | "dark";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ThemeService {
   private storage = inject(StorageService);
@@ -45,9 +45,6 @@ export class ThemeService {
     const shouldBeDark = mode === "dark" || (mode === "auto" && this.darkQuery.matches);
 
     document.documentElement.classList.toggle("ion-palette-dark", shouldBeDark);
-    document.documentElement.style.setProperty(
-      "color-scheme",
-      shouldBeDark ? "dark" : "light"
-    );
+    document.documentElement.style.setProperty("color-scheme", shouldBeDark ? "dark" : "light");
   }
 }

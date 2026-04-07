@@ -1,10 +1,10 @@
-import { Injectable, inject } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
-import { ApiService } from "./api.service";
 import { Statement } from "../models/statement.model";
+import { ApiService } from "./api.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ModerationService {
   private api = inject(ApiService);
@@ -14,6 +14,8 @@ export class ModerationService {
   }
 
   async moderate(statementId: number, status: "approved" | "rejected"): Promise<Statement> {
-    return firstValueFrom(this.api.patch<Statement>(`/statement/${statementId}/moderate`, { status }));
+    return firstValueFrom(
+      this.api.patch<Statement>(`/statement/${statementId}/moderate`, { status }),
+    );
   }
 }

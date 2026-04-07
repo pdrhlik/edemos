@@ -1,4 +1,4 @@
-import { Injectable, inject } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { ApiService } from "./api.service";
 
@@ -8,14 +8,14 @@ export interface VoteProgress {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ResponseService {
   private api = inject(ApiService);
 
   async submitResponse(statementId: number, vote: string, isImportant: boolean) {
     return firstValueFrom(
-      this.api.post(`/statement/${statementId}/response`, { vote, isImportant })
+      this.api.post(`/statement/${statementId}/response`, { vote, isImportant }),
     );
   }
 

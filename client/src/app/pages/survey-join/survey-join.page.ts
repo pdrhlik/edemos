@@ -1,30 +1,41 @@
-import { Component, inject, signal, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButtons, IonBackButton, IonButton, IonSelect,
-  IonSelectOption, IonRadioGroup, IonRadio, IonItem,
-  IonLabel, IonInput
+  IonBackButton,
+  IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem,
+  IonLabel, IonRadio, IonRadioGroup, IonSelect,
+  IonSelectOption, IonTitle, IonToolbar
 } from "@ionic/angular/standalone";
-import { ApiService } from "../../services/api.service";
-import { Survey } from "../../models/survey.model";
-import { SurveyService } from "../../services/survey.service";
+import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { firstValueFrom } from "rxjs";
+import { Survey } from "../../models/survey.model";
+import { ApiService } from "../../services/api.service";
+import { SurveyService } from "../../services/survey.service";
 
 @Component({
   selector: "app-survey-join",
   standalone: true,
   imports: [
-    FormsModule, TranslatePipe,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonButtons, IonBackButton, IonButton, IonSelect,
-    IonSelectOption, IonRadioGroup, IonRadio, IonItem,
-    IonLabel, IonInput
+    FormsModule,
+    TranslatePipe,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonBackButton,
+    IonButton,
+    IonSelect,
+    IonSelectOption,
+    IonRadioGroup,
+    IonRadio,
+    IonItem,
+    IonLabel,
+    IonInput,
   ],
   templateUrl: "./survey-join.page.html",
-  styleUrls: ["./survey-join.page.scss"]
+  styleUrls: ["./survey-join.page.scss"],
 })
 export class SurveyJoinPage implements OnInit {
   private route = inject(ActivatedRoute);
@@ -80,7 +91,7 @@ export class SurveyJoinPage implements OnInit {
 
     const intakeData = Object.keys(this.formData).length > 0 ? this.formData : undefined;
     await firstValueFrom(
-      this.api.post(`/survey/${s.slug}/join`, { intakeData: intakeData || null })
+      this.api.post(`/survey/${s.slug}/join`, { intakeData: intakeData || null }),
     );
     this.router.navigateByUrl(`/survey/${s.slug}`, { replaceUrl: true });
   }

@@ -47,10 +47,8 @@
 
       <ion-button expand="block" type="submit" [disabled]="submitting()">
         @if (submitting()) {
-          <ion-spinner name="crescent"></ion-spinner>
-        } @else {
-          {{ "auth.register" | translate }}
-        }
+        <ion-spinner name="crescent"></ion-spinner>
+        } @else { {{ "auth.register" | translate }} }
       </ion-button>
     </form>
 

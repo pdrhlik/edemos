@@ -9,92 +9,90 @@
 
 <ion-content class="ion-padding">
   @if (survey(); as s) {
-    <div class="detail-container">
-      <ion-card>
-        <ion-card-header>
-          <div class="card-header-row">
-            <ion-card-title>{{ s.title }}</ion-card-title>
-            <ion-badge [color]="statusColor(s.status)">
-              {{ "survey." + s.status | translate }}
-            </ion-badge>
-          </div>
-        </ion-card-header>
-        <ion-card-content>
-          @if (s.description) {
-            <p class="description">{{ s.description }}</p>
-          }
-        </ion-card-content>
-      </ion-card>
-
-      <!-- Admin actions -->
-      @if (isAdmin) {
-        <div class="actions">
-          @if (s.status === "draft") {
-            <ion-button expand="block" color="success" (click)="activate()">
-              <ion-icon name="play-outline" slot="start"></ion-icon>
-              {{ "survey.activate" | translate }}
-            </ion-button>
-          }
-          @if (s.status === "active") {
-            <ion-button expand="block" color="danger" (click)="closeSurvey()">
-              <ion-icon name="close-outline" slot="start"></ion-icon>
-              {{ "survey.close-survey" | translate }}
-            </ion-button>
-          }
+  <div class="detail-container">
+    <ion-card>
+      <ion-card-header>
+        <div class="card-header-row">
+          <ion-card-title>{{ s.title }}</ion-card-title>
+          <ion-badge [color]="statusColor(s.status)">
+            {{ "survey." + s.status | translate }}
+          </ion-badge>
         </div>
-
-        <!-- Moderation link for admins/moderators -->
-        @if (s.status === "active" && pendingCount() > 0) {
-          <ion-button expand="block" fill="outline" [routerLink]="'/survey/' + s.slug + '/moderation'">
-            <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
-            {{ "moderation.queue" | translate }}
-            <ion-badge slot="end" color="warning">{{ pendingCount() }}</ion-badge>
-          </ion-button>
+      </ion-card-header>
+      <ion-card-content>
+        @if (s.description) {
+        <p class="description">{{ s.description }}</p>
         }
+      </ion-card-content>
+    </ion-card>
 
-        <!-- Seed statements for draft surveys -->
-        @if (s.status === "draft") {
-          <app-seed-statements
-            [surveySlug]="s.slug"
-            [charMin]="s.statementCharMin"
-            [charMax]="s.statementCharMax"
-          ></app-seed-statements>
-        }
-      }
-
-      <!-- Join button for non-participants -->
-      @if (!isParticipantOrAdmin && s.status === "active") {
-        <div class="actions">
-          <ion-button expand="block" [routerLink]="'/survey/' + s.slug + '/join'">
-            {{ "survey.join" | translate }}
-          </ion-button>
-        </div>
-      }
-
-      <!-- Participant actions -->
-      @if (isParticipantOrAdmin && s.status === "active") {
-        <div class="actions">
-          <ion-button expand="block" [routerLink]="'/survey/' + s.slug + '/vote'">
-            {{ "statement.start-voting" | translate }}
-          </ion-button>
-        </div>
-
-        <app-submit-statement
-          [surveySlug]="s.slug"
-          [charMin]="s.statementCharMin"
-          [charMax]="s.statementCharMax"
-          (statementSubmitted)="loadSurvey(s.slug)"
-        ></app-submit-statement>
-      }
-
-      <!-- Results button -->
-      @if (isParticipantOrAdmin && (s.status === "active" || s.status === "closed")) {
-        <div class="actions">
-          <ion-button expand="block" fill="outline" [routerLink]="'/survey/' + s.slug + '/results'">
-            {{ "results.results" | translate }}
-          </ion-button>
-        </div>
+    <!-- Admin actions -->
+    @if (isAdmin) {
+    <div class="actions">
+      @if (s.status === "draft") {
+      <ion-button expand="block" color="success" (click)="activate()">
+        <ion-icon name="play-outline" slot="start"></ion-icon>
+        {{ "survey.activate" | translate }}
+      </ion-button>
+      } @if (s.status === "active") {
+      <ion-button expand="block" color="danger" (click)="closeSurvey()">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        {{ "survey.close-survey" | translate }}
+      </ion-button>
       }
     </div>
+
+    <!-- Moderation link for admins/moderators -->
+    @if (s.status === "active" && pendingCount() > 0) {
+    <ion-button expand="block" fill="outline" [routerLink]="'/survey/' + s.slug + '/moderation'">
+      <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+      {{ "moderation.queue" | translate }}
+      <ion-badge slot="end" color="warning">{{ pendingCount() }}</ion-badge>
+    </ion-button>
+    }
+
+    <!-- Seed statements for draft surveys -->
+    @if (s.status === "draft") {
+    <app-seed-statements
+      [surveySlug]="s.slug"
+      [charMin]="s.statementCharMin"
+      [charMax]="s.statementCharMax"
+    ></app-seed-statements>
+    } }
+
+    <!-- Join button for non-participants -->
+    @if (!isParticipantOrAdmin && s.status === "active") {
+    <div class="actions">
+      <ion-button expand="block" [routerLink]="'/survey/' + s.slug + '/join'">
+        {{ "survey.join" | translate }}
+      </ion-button>
+    </div>
+    }
+
+    <!-- Participant actions -->
+    @if (isParticipantOrAdmin && s.status === "active") {
+    <div class="actions">
+      <ion-button expand="block" [routerLink]="'/survey/' + s.slug + '/vote'">
+        {{ "statement.start-voting" | translate }}
+      </ion-button>
+    </div>
+
+    <app-submit-statement
+      [surveySlug]="s.slug"
+      [charMin]="s.statementCharMin"
+      [charMax]="s.statementCharMax"
+      (statementSubmitted)="loadSurvey(s.slug)"
+    ></app-submit-statement>
+    }
+
+    <!-- Results button -->
+    @if (isParticipantOrAdmin && (s.status === "active" || s.status === "closed")) {
+    <div class="actions">
+      <ion-button expand="block" fill="outline" [routerLink]="'/survey/' + s.slug + '/results'">
+        {{ "results.results" | translate }}
+      </ion-button>
+    </div>
+    }
+  </div>
   }
 </ion-content>

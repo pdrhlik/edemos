@@ -1,35 +1,44 @@
-import { Component, inject, signal, OnInit } from "@angular/core";
-import { ActivatedRoute, RouterLink } from "@angular/router";
-import { TranslatePipe } from "@ngx-translate/core";
-import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButtons, IonBackButton, IonButton, IonIcon,
-  IonCard, IonCardContent, IonToggle, IonProgressBar,
-  IonText, IonSpinner
-} from "@ionic/angular/standalone";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { addIcons } from "ionicons";
-import {
-  thumbsUpOutline, thumbsDownOutline, removeOutline
-} from "ionicons/icons";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import {
+  IonBackButton,
+  IonButton, IonButtons, IonCard,
+  IonCardContent, IonContent, IonHeader, IonIcon, IonProgressBar, IonSpinner, IonText, IonTitle, IonToggle, IonToolbar
+} from "@ionic/angular/standalone";
+import { TranslatePipe } from "@ngx-translate/core";
+import { addIcons } from "ionicons";
+import { removeOutline, thumbsDownOutline, thumbsUpOutline } from "ionicons/icons";
 import { Statement } from "../../models/statement.model";
-import { StatementService } from "../../services/statement.service";
 import { ResponseService, VoteProgress } from "../../services/response.service";
+import { StatementService } from "../../services/statement.service";
 import { ToastService } from "../../services/toast.service";
 
 @Component({
   selector: "app-survey-vote",
   standalone: true,
   imports: [
-    FormsModule, RouterLink, TranslatePipe,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonButtons, IonBackButton, IonButton, IonIcon,
-    IonCard, IonCardContent, IonToggle, IonProgressBar,
-    IonText, IonSpinner
+    FormsModule,
+    RouterLink,
+    TranslatePipe,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonBackButton,
+    IonButton,
+    IonIcon,
+    IonCard,
+    IonCardContent,
+    IonToggle,
+    IonProgressBar,
+    IonText,
+    IonSpinner,
   ],
   templateUrl: "./survey-vote.page.html",
-  styleUrls: ["./survey-vote.page.scss"]
+  styleUrls: ["./survey-vote.page.scss"],
 })
 export class SurveyVotePage implements OnInit {
   private route = inject(ActivatedRoute);

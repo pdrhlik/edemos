@@ -1,12 +1,20 @@
-import { Component, inject, signal, OnInit } from "@angular/core";
 import { DecimalPipe } from "@angular/common";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { TranslatePipe } from "@ngx-translate/core";
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButtons, IonBackButton, IonText, IonBadge,
-  IonSegment, IonSegmentButton, IonLabel
+  IonBackButton,
+  IonBadge,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonLabel,
+  IonSegment,
+  IonSegmentButton,
+  IonText,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/angular/standalone";
+import { TranslatePipe } from "@ngx-translate/core";
 import { StatementResult, SurveyStats } from "../../models/results.model";
 import { ResultsService } from "../../services/results.service";
 
@@ -14,13 +22,22 @@ import { ResultsService } from "../../services/results.service";
   selector: "app-survey-results",
   standalone: true,
   imports: [
-    DecimalPipe, TranslatePipe,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonButtons, IonBackButton, IonText, IonBadge,
-    IonSegment, IonSegmentButton, IonLabel
+    DecimalPipe,
+    TranslatePipe,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonBackButton,
+    IonText,
+    IonBadge,
+    IonSegment,
+    IonSegmentButton,
+    IonLabel,
   ],
   templateUrl: "./survey-results.page.html",
-  styleUrls: ["./survey-results.page.scss"]
+  styleUrls: ["./survey-results.page.scss"],
 })
 export class SurveyResultsPage implements OnInit {
   private route = inject(ActivatedRoute);

@@ -1,12 +1,18 @@
-import { Component, inject, signal, OnInit } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { TranslatePipe } from "@ngx-translate/core";
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButtons, IonBackButton, IonButton, IonIcon,
-  IonList, IonItem, IonLabel, IonText, IonItemSliding,
-  IonItemOptions, IonItemOption
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonList,
+  IonText,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/angular/standalone";
+import { TranslatePipe } from "@ngx-translate/core";
 import { addIcons } from "ionicons";
 import { checkmarkOutline, closeOutline } from "ionicons/icons";
 import { Statement } from "../../models/statement.model";
@@ -18,13 +24,19 @@ import { ToastService } from "../../services/toast.service";
   standalone: true,
   imports: [
     TranslatePipe,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonButtons, IonBackButton, IonButton, IonIcon,
-    IonList, IonItem, IonLabel, IonText, IonItemSliding,
-    IonItemOptions, IonItemOption
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonBackButton,
+    IonButton,
+    IonIcon,
+    IonList,
+    IonText,
   ],
   templateUrl: "./survey-moderation.page.html",
-  styleUrls: ["./survey-moderation.page.scss"]
+  styleUrls: ["./survey-moderation.page.scss"],
 })
 export class SurveyModerationPage implements OnInit {
   private route = inject(ActivatedRoute);
@@ -53,7 +65,7 @@ export class SurveyModerationPage implements OnInit {
   async approve(st: Statement) {
     try {
       await this.moderationService.moderate(st.id, "approved");
-      this.queue.update(q => q.filter(s => s.id !== st.id));
+      this.queue.update((q) => q.filter((s) => s.id !== st.id));
       this.toast.success("moderation.approved");
     } catch (e) {
       this.toast.apiError(e);
@@ -63,7 +75,7 @@ export class SurveyModerationPage implements OnInit {
   async reject(st: Statement) {
     try {
       await this.moderationService.moderate(st.id, "rejected");
-      this.queue.update(q => q.filter(s => s.id !== st.id));
+      this.queue.update((q) => q.filter((s) => s.id !== st.id));
       this.toast.success("moderation.rejected");
     } catch (e) {
       this.toast.apiError(e);

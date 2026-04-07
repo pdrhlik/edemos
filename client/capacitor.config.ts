@@ -1,9 +1,9 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'client',
-  webDir: 'www'
+  appId: "com.edemos.app",
+  appName: "eDemOS",
+  webDir: "www",
 };
 
 export default config;

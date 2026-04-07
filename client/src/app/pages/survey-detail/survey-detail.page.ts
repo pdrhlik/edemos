@@ -1,39 +1,59 @@
 import { Component, inject, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButtons, IonBackButton, IonButton,
-  IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-  IonBadge, IonIcon, AlertController
+  AlertController,
+  IonBackButton,
+  IonBadge,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/angular/standalone";
+import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { addIcons } from "ionicons";
-import { playOutline, closeOutline, shieldCheckmarkOutline } from "ionicons/icons";
-import { Survey } from "../../models/survey.model";
-import { SurveyService } from "../../services/survey.service";
-import { SurveyParticipant } from "../../models/participant.model";
-import { ApiService } from "../../services/api.service";
-import { AuthService } from "../../services/auth.service";
+import { closeOutline, playOutline, shieldCheckmarkOutline } from "ionicons/icons";
+import { firstValueFrom } from "rxjs";
 import { SeedStatementsComponent } from "../../components/seed-statements/seed-statements.component";
 import { SubmitStatementComponent } from "../../components/submit-statement/submit-statement.component";
+import { SurveyParticipant } from "../../models/participant.model";
+import { Survey } from "../../models/survey.model";
+import { ApiService } from "../../services/api.service";
+import { AuthService } from "../../services/auth.service";
 import { ModerationService } from "../../services/moderation.service";
+import { SurveyService } from "../../services/survey.service";
 import { ToastService } from "../../services/toast.service";
-import { firstValueFrom } from "rxjs";
 
 @Component({
   selector: "app-survey-detail",
   standalone: true,
   imports: [
-    TranslatePipe, RouterLink,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonButtons, IonBackButton, IonButton,
-    IonCard, IonCardHeader, IonCardTitle, IonCardContent,
-    IonBadge, IonIcon,
+    TranslatePipe,
+    RouterLink,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonBackButton,
+    IonButton,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonBadge,
+    IonIcon,
     SeedStatementsComponent,
-    SubmitStatementComponent
+    SubmitStatementComponent,
   ],
   templateUrl: "./survey-detail.page.html",
-  styleUrls: ["./survey-detail.page.scss"]
+  styleUrls: ["./survey-detail.page.scss"],
 })
 export class SurveyDetailPage {
   private route = inject(ActivatedRoute);
@@ -66,7 +86,9 @@ export class SurveyDetailPage {
 
     // Check if current user is a participant
     try {
-      const p = await firstValueFrom(this.api.get<SurveyParticipant>(`/survey/${slug}/participant/me`));
+      const p = await firstValueFrom(
+        this.api.get<SurveyParticipant>(`/survey/${slug}/participant/me`),
+      );
       this.participant.set(p);
 
       // Load pending moderation count for admins/moderators
@@ -91,17 +113,21 @@ export class SurveyDetailPage {
 
   statusColor(status: string): string {
     switch (status) {
-      case "draft": return "medium";
-      case "active": return "success";
-      case "closed": return "danger";
-      default: return "medium";
+      case "draft":
+        return "medium";
+      case "active":
+        return "success";
+      case "closed":
+        return "danger";
+      default:
+        return "medium";
     }
   }
 
   async activate() {
     const confirmed = await this.confirmAction(
       this.translate.instant("survey.activate"),
-      this.translate.instant("survey.activate-confirm")
+      this.translate.instant("survey.activate-confirm"),
     );
     if (!confirmed) return;
 
@@ -119,7 +145,7 @@ export class SurveyDetailPage {
   async closeSurvey() {
     const confirmed = await this.confirmAction(
       this.translate.instant("survey.close-survey"),
-      this.translate.instant("survey.close-confirm")
+      this.translate.instant("survey.close-confirm"),
     );
     if (!confirmed) return;
 

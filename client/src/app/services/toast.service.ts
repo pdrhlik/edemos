@@ -1,9 +1,9 @@
-import { Injectable, inject } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { ToastController } from "@ionic/angular/standalone";
 import { TranslateService } from "@ngx-translate/core";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ToastService {
   private toastController = inject(ToastController);
@@ -28,7 +28,7 @@ export class ToastService {
       duration: 5000,
       color: "danger",
       position: "bottom",
-      buttons: [{ text: this.translate.instant("common.close"), role: "cancel" }]
+      buttons: [{ text: this.translate.instant("common.close"), role: "cancel" }],
     });
     await toast.present();
   }
@@ -38,7 +38,7 @@ export class ToastService {
     color: string,
     duration: number,
     params?: Record<string, string>,
-    dismissible = false
+    dismissible = false,
   ) {
     const message = this.translate.instant(messageKey, params);
     const buttons = dismissible
@@ -49,7 +49,7 @@ export class ToastService {
       duration,
       color,
       position: "bottom",
-      buttons
+      buttons,
     });
     await toast.present();
   }

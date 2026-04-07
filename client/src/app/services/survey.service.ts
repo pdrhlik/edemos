@@ -1,10 +1,13 @@
-import { Injectable, inject, signal } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
 import { firstValueFrom } from "rxjs";
+import {
+  CreateSurveyRequest, Survey,
+  SurveyListItem, UpdateSurveyRequest
+} from "../models/survey.model";
 import { ApiService } from "./api.service";
-import { Survey, SurveyListItem, CreateSurveyRequest, UpdateSurveyRequest } from "../models/survey.model";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class SurveyService {
   private api = inject(ApiService);

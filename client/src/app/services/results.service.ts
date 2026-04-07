@@ -1,10 +1,10 @@
-import { Injectable, inject } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
-import { ApiService } from "./api.service";
 import { ResultsResponse } from "../models/results.model";
+import { ApiService } from "./api.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ResultsService {
   private api = inject(ApiService);

@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Preferences } from '@capacitor/preferences';
+import { Injectable } from "@angular/core";
+import { Preferences } from "@capacitor/preferences";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class StorageService {
-
   public set(key: string, value: any) {
     return Preferences.set({
       key: key,
-      value: JSON.stringify(value)
+      value: JSON.stringify(value),
     });
   }
 

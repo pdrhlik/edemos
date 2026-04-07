@@ -9,65 +9,53 @@
 
 <ion-content class="ion-padding">
   @if (survey(); as s) {
-    <div class="join-container">
-      <h2>{{ s.title }}</h2>
+  <div class="join-container">
+    <h2>{{ s.title }}</h2>
 
-      @if (intakeFields().length > 0) {
-        <form (ngSubmit)="onSubmit()" class="intake-form">
-          @for (field of intakeFields(); track field.key) {
-            @if (field.type === "select") {
-              <ion-select
-                labelPlacement="stacked"
-                fill="outline"
-                [(ngModel)]="formData[field.key]"
-                [name]="field.key"
-                [label]="getLabel(field)"
-                interface="popover"
-              >
-                @for (option of field.options; track option.value) {
-                  <ion-select-option [value]="option.value">
-                    {{ getOptionLabel(option) }}
-                  </ion-select-option>
-                }
-              </ion-select>
-            }
-
-            @if (field.type === "radio") {
-              <div class="radio-group">
-                <ion-label>{{ getLabel(field) }}</ion-label>
-                <ion-radio-group [(ngModel)]="formData[field.key]" [name]="field.key">
-                  @for (option of field.options; track option.value) {
-                    <ion-item>
-                      <ion-radio [value]="option.value" labelPlacement="end">
-                        {{ getOptionLabel(option) }}
-                      </ion-radio>
-                    </ion-item>
-                  }
-                </ion-radio-group>
-              </div>
-            }
-
-            @if (field.type === "text") {
-              <ion-input
-                type="text"
-                labelPlacement="stacked"
-                fill="outline"
-                [(ngModel)]="formData[field.key]"
-                [name]="field.key"
-                [label]="getLabel(field)"
-              ></ion-input>
-            }
+    @if (intakeFields().length > 0) {
+    <form (ngSubmit)="onSubmit()" class="intake-form">
+      @for (field of intakeFields(); track field.key) { @if (field.type === "select") {
+      <ion-select
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="formData[field.key]"
+        [name]="field.key"
+        [label]="getLabel(field)"
+        interface="popover"
+      >
+        @for (option of field.options; track option.value) {
+        <ion-select-option [value]="option.value"> {{ getOptionLabel(option) }} </ion-select-option>
+        }
+      </ion-select>
+      } @if (field.type === "radio") {
+      <div class="radio-group">
+        <ion-label>{{ getLabel(field) }}</ion-label>
+        <ion-radio-group [(ngModel)]="formData[field.key]" [name]="field.key">
+          @for (option of field.options; track option.value) {
+          <ion-item>
+            <ion-radio [value]="option.value" labelPlacement="end">
+              {{ getOptionLabel(option) }}
+            </ion-radio>
+          </ion-item>
           }
+        </ion-radio-group>
+      </div>
+      } @if (field.type === "text") {
+      <ion-input
+        type="text"
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="formData[field.key]"
+        [name]="field.key"
+        [label]="getLabel(field)"
+      ></ion-input>
+      } }
 
-          <ion-button expand="block" type="submit">
-            {{ "survey.join" | translate }}
-          </ion-button>
-        </form>
-      } @else {
-        <ion-button expand="block" (click)="onSubmit()">
-          {{ "survey.join" | translate }}
-        </ion-button>
-      }
-    </div>
+      <ion-button expand="block" type="submit"> {{ "survey.join" | translate }} </ion-button>
+    </form>
+    } @else {
+    <ion-button expand="block" (click)="onSubmit()"> {{ "survey.join" | translate }} </ion-button>
+    }
+  </div>
   }
 </ion-content>

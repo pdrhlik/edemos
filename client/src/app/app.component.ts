@@ -1,16 +1,12 @@
 import { Component, inject } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
-import { TranslatePipe } from "@ngx-translate/core";
 import {
-  IonApp, IonRouterOutlet, IonSplitPane,
-  IonMenu, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonList, IonItem, IonIcon,
-  IonLabel, IonFooter, IonMenuToggle
+  IonApp, IonContent, IonFooter, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonRouterOutlet,
+  IonSplitPane, IonTitle, IonToolbar
 } from "@ionic/angular/standalone";
+import { TranslatePipe } from "@ngx-translate/core";
 import { addIcons } from "ionicons";
-import {
-  listOutline, settingsOutline, logOutOutline
-} from "ionicons/icons";
+import { listOutline, logOutOutline, settingsOutline } from "ionicons/icons";
 import { AuthService } from "./services/auth.service";
 import { ToastService } from "./services/toast.service";
 
@@ -19,11 +15,23 @@ import { ToastService } from "./services/toast.service";
   templateUrl: "app.component.html",
   styleUrls: ["app.component.scss"],
   imports: [
-    RouterLink, RouterLinkActive, TranslatePipe,
-    IonApp, IonRouterOutlet, IonSplitPane,
-    IonMenu, IonHeader, IonToolbar, IonTitle,
-    IonContent, IonList, IonItem, IonIcon,
-    IonLabel, IonFooter, IonMenuToggle
+    RouterLink,
+    RouterLinkActive,
+    TranslatePipe,
+    IonApp,
+    IonRouterOutlet,
+    IonSplitPane,
+    IonMenu,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonList,
+    IonItem,
+    IonIcon,
+    IonLabel,
+    IonFooter,
+    IonMenuToggle,
   ],
 })
 export class AppComponent {

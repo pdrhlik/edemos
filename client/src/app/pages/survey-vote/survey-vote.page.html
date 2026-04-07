@@ -12,66 +12,66 @@
     <ion-progress-bar [value]="progressFraction"></ion-progress-bar>
 
     @if (loading()) {
-      <div class="loading-state">
-        <ion-spinner name="crescent"></ion-spinner>
-      </div>
+    <div class="loading-state">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
     } @else if (allDone()) {
-      <div class="done-state">
-        <ion-text color="success">
-          <h2>{{ "statement.all-done" | translate }}</h2>
-        </ion-text>
-        <ion-button [routerLink]="'/survey/' + surveySlug" expand="block" fill="outline">
-          {{ "common.back" | translate }}
-        </ion-button>
-      </div>
+    <div class="done-state">
+      <ion-text color="success">
+        <h2>{{ "statement.all-done" | translate }}</h2>
+      </ion-text>
+      <ion-button [routerLink]="'/survey/' + surveySlug" expand="block" fill="outline">
+        {{ "common.back" | translate }}
+      </ion-button>
+    </div>
     } @else if (currentStatement(); as st) {
-      <ion-card class="statement-card">
-        <ion-card-content>
-          <p class="statement-text">{{ st.text }}</p>
-        </ion-card-content>
-      </ion-card>
+    <ion-card class="statement-card">
+      <ion-card-content>
+        <p class="statement-text">{{ st.text }}</p>
+      </ion-card-content>
+    </ion-card>
 
-      <div class="important-toggle">
-        <ion-toggle [(ngModel)]="isImportant" labelPlacement="start">
-          {{ "statement.important" | translate }}
-        </ion-toggle>
-      </div>
+    <div class="important-toggle">
+      <ion-toggle [(ngModel)]="isImportant" labelPlacement="start">
+        {{ "statement.important" | translate }}
+      </ion-toggle>
+    </div>
 
-      <div class="vote-buttons">
-        <ion-button
-          expand="block"
-          color="success"
-          (click)="vote('agree')"
-          [disabled]="voting()"
-          class="vote-btn"
-        >
-          <ion-icon name="thumbs-up-outline" slot="start"></ion-icon>
-          {{ "statement.agree" | translate }}
-        </ion-button>
+    <div class="vote-buttons">
+      <ion-button
+        expand="block"
+        color="success"
+        (click)="vote('agree')"
+        [disabled]="voting()"
+        class="vote-btn"
+      >
+        <ion-icon name="thumbs-up-outline" slot="start"></ion-icon>
+        {{ "statement.agree" | translate }}
+      </ion-button>
 
-        <ion-button
-          expand="block"
-          color="danger"
-          (click)="vote('disagree')"
-          [disabled]="voting()"
-          class="vote-btn"
-        >
-          <ion-icon name="thumbs-down-outline" slot="start"></ion-icon>
-          {{ "statement.disagree" | translate }}
-        </ion-button>
+      <ion-button
+        expand="block"
+        color="danger"
+        (click)="vote('disagree')"
+        [disabled]="voting()"
+        class="vote-btn"
+      >
+        <ion-icon name="thumbs-down-outline" slot="start"></ion-icon>
+        {{ "statement.disagree" | translate }}
+      </ion-button>
 
-        <ion-button
-          expand="block"
-          color="medium"
-          fill="outline"
-          (click)="vote('abstain')"
-          [disabled]="voting()"
-          class="vote-btn"
-        >
-          <ion-icon name="remove-outline" slot="start"></ion-icon>
-          {{ "statement.abstain" | translate }}
-        </ion-button>
-      </div>
+      <ion-button
+        expand="block"
+        color="medium"
+        fill="outline"
+        (click)="vote('abstain')"
+        [disabled]="voting()"
+        class="vote-btn"
+      >
+        <ion-icon name="remove-outline" slot="start"></ion-icon>
+        {{ "statement.abstain" | translate }}
+      </ion-button>
+    </div>
     }
   </div>
 </ion-content>

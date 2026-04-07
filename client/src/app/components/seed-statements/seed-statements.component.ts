@@ -1,10 +1,15 @@
-import { Component, inject, input, signal, OnInit } from "@angular/core";
+import { Component, inject, input, OnInit, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { TranslatePipe } from "@ngx-translate/core";
 import {
-  IonList, IonItem, IonLabel, IonInput, IonButton,
-  IonIcon, IonText, IonNote
+  IonButton,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonNote,
 } from "@ionic/angular/standalone";
+import { TranslatePipe } from "@ngx-translate/core";
 import { addIcons } from "ionicons";
 import { addOutline } from "ionicons/icons";
 import { Statement } from "../../models/statement.model";
@@ -14,12 +19,18 @@ import { StatementService } from "../../services/statement.service";
   selector: "app-seed-statements",
   standalone: true,
   imports: [
-    FormsModule, TranslatePipe,
-    IonList, IonItem, IonLabel, IonInput, IonButton,
-    IonIcon, IonText, IonNote
+    FormsModule,
+    TranslatePipe,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonButton,
+    IonIcon,
+    IonNote,
   ],
   templateUrl: "./seed-statements.component.html",
-  styleUrls: ["./seed-statements.component.scss"]
+  styleUrls: ["./seed-statements.component.scss"],
 })
 export class SeedStatementsComponent implements OnInit {
   private statementService = inject(StatementService);

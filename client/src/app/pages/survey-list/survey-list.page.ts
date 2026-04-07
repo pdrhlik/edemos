@@ -1,11 +1,23 @@
 import { Component, inject, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { TranslatePipe } from "@ngx-translate/core";
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent, IonButtons,
-  IonMenuButton, IonList, IonItem, IonLabel, IonBadge,
-  IonFab, IonFabButton, IonIcon, IonText, IonSkeletonText
+  IonBadge,
+  IonButtons,
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenuButton,
+  IonSkeletonText,
+  IonText,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/angular/standalone";
+import { TranslatePipe } from "@ngx-translate/core";
 import { addIcons } from "ionicons";
 import { addOutline } from "ionicons/icons";
 import { SurveyService } from "../../services/survey.service";
@@ -14,13 +26,26 @@ import { SurveyService } from "../../services/survey.service";
   selector: "app-survey-list",
   standalone: true,
   imports: [
-    RouterLink, TranslatePipe,
-    IonHeader, IonToolbar, IonTitle, IonContent, IonButtons,
-    IonMenuButton, IonList, IonItem, IonLabel, IonBadge,
-    IonFab, IonFabButton, IonIcon, IonText, IonSkeletonText
+    RouterLink,
+    TranslatePipe,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonMenuButton,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonBadge,
+    IonFab,
+    IonFabButton,
+    IonIcon,
+    IonText,
+    IonSkeletonText,
   ],
   templateUrl: "./survey-list.page.html",
-  styleUrls: ["./survey-list.page.scss"]
+  styleUrls: ["./survey-list.page.scss"],
 })
 export class SurveyListPage {
   surveyService = inject(SurveyService);
@@ -32,19 +57,20 @@ export class SurveyListPage {
 
   async ionViewWillEnter() {
     this.loading.set(true);
-    await Promise.all([
-      this.surveyService.loadSurveys(),
-      this.surveyService.loadPublicSurveys()
-    ]);
+    await Promise.all([this.surveyService.loadSurveys(), this.surveyService.loadPublicSurveys()]);
     this.loading.set(false);
   }
 
   statusColor(status: string): string {
     switch (status) {
-      case "draft": return "medium";
-      case "active": return "success";
-      case "closed": return "danger";
-      default: return "medium";
+      case "draft":
+        return "medium";
+      case "active":
+        return "success";
+      case "closed":
+        return "danger";
+      default:
+        return "medium";
     }
   }
 }

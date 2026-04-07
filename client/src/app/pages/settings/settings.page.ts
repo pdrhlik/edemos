@@ -1,25 +1,40 @@
-import { Component, inject, signal, OnInit } from "@angular/core";
-import { TranslatePipe } from "@ngx-translate/core";
-import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButtons, IonMenuButton, IonList, IonItem,
-  IonSelect, IonSelectOption
-} from "@ionic/angular/standalone";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import {
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonList,
+  IonMenuButton,
+  IonSelect,
+  IonSelectOption,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/angular/standalone";
+import { TranslatePipe } from "@ngx-translate/core";
 import { LocaleService } from "../../services/locale.service";
-import { ThemeService, ThemeMode } from "../../services/theme.service";
+import { ThemeMode, ThemeService } from "../../services/theme.service";
 
 @Component({
   selector: "app-settings",
   standalone: true,
   imports: [
-    FormsModule, TranslatePipe,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonButtons, IonMenuButton, IonList, IonItem,
-    IonSelect, IonSelectOption
+    FormsModule,
+    TranslatePipe,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonMenuButton,
+    IonList,
+    IonItem,
+    IonSelect,
+    IonSelectOption,
   ],
   templateUrl: "./settings.page.html",
-  styleUrls: ["./settings.page.scss"]
+  styleUrls: ["./settings.page.scss"],
 })
 export class SettingsPage implements OnInit {
   private localeService = inject(LocaleService);

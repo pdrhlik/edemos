@@ -1,10 +1,7 @@
 import { Component, inject, input, output, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { IonButton, IonIcon, IonInput, IonNote, ToastController } from "@ionic/angular/standalone";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
-import {
-  IonInput, IonButton, IonIcon, IonNote, IonText,
-  ToastController
-} from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
 import { sendOutline } from "ionicons/icons";
 import { StatementService } from "../../services/statement.service";
@@ -12,12 +9,9 @@ import { StatementService } from "../../services/statement.service";
 @Component({
   selector: "app-submit-statement",
   standalone: true,
-  imports: [
-    FormsModule, TranslatePipe,
-    IonInput, IonButton, IonIcon, IonNote, IonText
-  ],
+  imports: [FormsModule, TranslatePipe, IonInput, IonButton, IonIcon, IonNote],
   templateUrl: "./submit-statement.component.html",
-  styleUrls: ["./submit-statement.component.scss"]
+  styleUrls: ["./submit-statement.component.scss"],
 })
 export class SubmitStatementComponent {
   private statementService = inject(StatementService);
@@ -58,7 +52,7 @@ export class SubmitStatementComponent {
       message: this.translate.instant("statement.submitted-for-moderation"),
       duration: 3000,
       color: "success",
-      position: "bottom"
+      position: "bottom",
     });
     await toast.present();
 

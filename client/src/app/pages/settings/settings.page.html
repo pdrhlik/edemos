@@ -31,9 +31,15 @@
           (ionChange)="onThemeChange($event)"
           interface="popover"
         >
-          <ion-select-option value="auto">{{ "settings.theme-auto" | translate }}</ion-select-option>
-          <ion-select-option value="light">{{ "settings.theme-light" | translate }}</ion-select-option>
-          <ion-select-option value="dark">{{ "settings.theme-dark" | translate }}</ion-select-option>
+          <ion-select-option value="auto"
+            >{{ "settings.theme-auto" | translate }}</ion-select-option
+          >
+          <ion-select-option value="light"
+            >{{ "settings.theme-light" | translate }}</ion-select-option
+          >
+          <ion-select-option value="dark"
+            >{{ "settings.theme-dark" | translate }}</ion-select-option
+          >
         </ion-select>
       </ion-item>
     </ion-list>

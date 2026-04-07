@@ -1,14 +1,14 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "../../environments/environment";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ApiService {
   private http = inject(HttpClient);
-  private baseUrl = environment.apiUrl + '/api/v1';
+  private baseUrl = environment.apiUrl + "/api/v1";
 
   get<T>(path: string): Observable<T> {
     return this.http.get<T>(`${this.baseUrl}${path}`);

@@ -1,11 +1,16 @@
 import { Component, inject, signal } from "@angular/core";
-import { Router, RouterLink } from "@angular/router";
 import { FormsModule } from "@angular/forms";
-import { TranslatePipe } from "@ngx-translate/core";
+import { Router, RouterLink } from "@angular/router";
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonInput, IonButton, IonText, IonSpinner
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonSpinner,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/angular/standalone";
+import { TranslatePipe } from "@ngx-translate/core";
 import { AuthService } from "../../services/auth.service";
 import { ToastService } from "../../services/toast.service";
 
@@ -13,12 +18,19 @@ import { ToastService } from "../../services/toast.service";
   selector: "app-login",
   standalone: true,
   imports: [
-    FormsModule, RouterLink, TranslatePipe,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonInput, IonButton, IonText, IonSpinner
+    FormsModule,
+    RouterLink,
+    TranslatePipe,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonInput,
+    IonButton,
+    IonSpinner,
   ],
   templateUrl: "./login.page.html",
-  styleUrls: ["./login.page.scss"]
+  styleUrls: ["./login.page.scss"],
 })
 export class LoginPage {
   private auth = inject(AuthService);
