@@ -1,0 +1,57 @@
+services:
+  mariadb:
+    image: mariadb:12
+    container_name: edemos-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: edemos
+      MARIADB_USER: edemos
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    ports:
+      - "127.0.0.1:3306:3306"
+    networks:
+      - edemos
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: edemos-server
+    restart: unless-stopped
+    environment:
+      DB_DSN: edemos:${MARIADB_PASSWORD}@tcp(mariadb:3306)/edemos?parseTime=true
+      JWT_SECRET: ${JWT_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM}
+      BASE_URL: ${BASE_URL}
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - edemos
+    depends_on:
+      - mariadb
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: edemos-client
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4200:80"
+    networks:
+      - edemos
+
+networks:
+  edemos:
+    driver: bridge
+
+volumes:
+  mariadb-data:

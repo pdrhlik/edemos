@@ -1,0 +1,24 @@
+# Environment
+.env
+.env.production
+
+# Go
+server/tmp/
+
+# Node
+client/node_modules/
+client/www/
+client/.angular/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker volumes
+mariadb-data/

@@ -1,0 +1,79 @@
+services:
+  mariadb:
+    image: mariadb:12
+    container_name: edemos-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: edemos
+      MARIADB_USER: edemos
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    ports:
+      - "127.0.0.1:3307:3306"
+    networks:
+      - edemos
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    container_name: edemos-server
+    restart: unless-stopped
+    environment:
+      DB_DSN: edemos:${MARIADB_PASSWORD}@tcp(mariadb:3306)/edemos?parseTime=true
+      JWT_SECRET: ${JWT_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM}
+      BASE_URL: ${BASE_URL}
+    volumes:
+      - ./server:/app
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - edemos
+    depends_on:
+      - mariadb
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: edemos-client
+    restart: unless-stopped
+    environment:
+      API_URL: http://server:8080
+    volumes:
+      - ./client/src:/app/src
+      - ./client/angular.json:/app/angular.json
+    ports:
+      - "127.0.0.1:4200:4200"
+    networks:
+      - edemos
+    depends_on:
+      - server
+
+  adminer:
+    image: adminer
+    container_name: edemos-adminer
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb
+    ports:
+      - "127.0.0.1:8081:8080"
+    networks:
+      - edemos
+    depends_on:
+      - mariadb
+
+networks:
+  edemos:
+    driver: bridge
+
+volumes:
+  mariadb-data:
