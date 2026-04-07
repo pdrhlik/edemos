@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import {
@@ -8,13 +8,15 @@ import {
   IonBadge, IonIcon, AlertController
 } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
-import { playOutline, closeOutline } from "ionicons/icons";
+import { playOutline, closeOutline, shieldCheckmarkOutline } from "ionicons/icons";
 import { Survey } from "../../models/survey.model";
 import { SurveyService } from "../../services/survey.service";
 import { SurveyParticipant } from "../../models/participant.model";
 import { ApiService } from "../../services/api.service";
 import { AuthService } from "../../services/auth.service";
 import { SeedStatementsComponent } from "../../components/seed-statements/seed-statements.component";
+import { SubmitStatementComponent } from "../../components/submit-statement/submit-statement.component";
+import { ModerationService } from "../../services/moderation.service";
 import { firstValueFrom } from "rxjs";
 
 @Component({
@@ -26,27 +28,30 @@ import { firstValueFrom } from "rxjs";
     IonButtons, IonBackButton, IonButton,
     IonCard, IonCardHeader, IonCardTitle, IonCardContent,
     IonBadge, IonIcon,
-    SeedStatementsComponent
+    SeedStatementsComponent,
+    SubmitStatementComponent
   ],
   templateUrl: "./survey-detail.page.html",
   styleUrls: ["./survey-detail.page.scss"]
 })
-export class SurveyDetailPage implements OnInit {
+export class SurveyDetailPage {
   private route = inject(ActivatedRoute);
   private surveyService = inject(SurveyService);
   private translate = inject(TranslateService);
   private alertController = inject(AlertController);
   private api = inject(ApiService);
   private auth = inject(AuthService);
+  private moderationService = inject(ModerationService);
 
   survey = signal<Survey | null>(null);
   participant = signal<SurveyParticipant | null>(null);
+  pendingCount = signal(0);
 
   constructor() {
-    addIcons({ playOutline, closeOutline });
+    addIcons({ playOutline, closeOutline, shieldCheckmarkOutline });
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     const id = Number(this.route.snapshot.paramMap.get("id"));
     if (id) {
       this.loadSurvey(id);
@@ -61,6 +66,14 @@ export class SurveyDetailPage implements OnInit {
     try {
       const p = await firstValueFrom(this.api.get<SurveyParticipant>(`/survey/${id}/participant/me`));
       this.participant.set(p);
+
+      // Load pending moderation count for admins/moderators
+      if (p.role === "admin" || p.role === "moderator") {
+        try {
+          const queue = await this.moderationService.getQueue(id);
+          this.pendingCount.set(queue.length);
+        } catch {}
+      }
     } catch {
       this.participant.set(null);
     }

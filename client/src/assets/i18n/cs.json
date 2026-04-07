@@ -57,7 +57,10 @@
     "continue-voting": "Pokračovat v hlasování",
     "seed-statements": "Počáteční výroky",
     "add-seed": "Přidat počáteční výrok",
-    "char-count": "{{count}} / {{max}} znaků"
+    "char-count": "{{count}} / {{max}} znaků",
+    "your-statement": "Váš výrok",
+    "submitted-for-moderation": "Výrok byl odeslán k moderaci",
+    "moderation-hint": "Váš výrok bude posouzen moderátorem, než se objeví v průzkumu"
   },
   "moderation": {
     "queue": "Fronta moderace",

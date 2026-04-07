@@ -43,6 +43,15 @@
           }
         </div>
 
+        <!-- Moderation link for admins/moderators -->
+        @if (s.status === "active" && pendingCount() > 0) {
+          <ion-button expand="block" fill="outline" [routerLink]="'/survey/' + s.id + '/moderation'">
+            <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+            {{ "moderation.queue" | translate }}
+            <ion-badge slot="end" color="warning">{{ pendingCount() }}</ion-badge>
+          </ion-button>
+        }
+
         <!-- Seed statements for draft surveys -->
         @if (s.status === "draft") {
           <app-seed-statements
@@ -69,6 +78,13 @@
             {{ "statement.start-voting" | translate }}
           </ion-button>
         </div>
+
+        <app-submit-statement
+          [surveyId]="s.id"
+          [charMin]="s.statementCharMin"
+          [charMax]="s.statementCharMax"
+          (statementSubmitted)="loadSurvey(s.id)"
+        ></app-submit-statement>
       }
     </div>
   }

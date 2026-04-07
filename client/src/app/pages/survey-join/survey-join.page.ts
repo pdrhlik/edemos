@@ -82,6 +82,6 @@ export class SurveyJoinPage implements OnInit {
     await firstValueFrom(
       this.api.post(`/survey/${s.id}/join`, { intakeData: intakeData || null })
     );
-    this.router.navigateByUrl(`/survey/${s.id}`);
+    this.router.navigateByUrl(`/survey/${s.id}`, { replaceUrl: true });
   }
 }

@@ -1,0 +1,25 @@
+<div class="submit-section">
+  <h3>{{ "statement.submit" | translate }}</h3>
+
+  <div class="submit-form">
+    <ion-input
+      type="text"
+      labelPlacement="stacked"
+      fill="outline"
+      [(ngModel)]="newText"
+      name="newText"
+      [label]="'statement.your-statement' | translate"
+      [maxlength]="charMax()"
+    ></ion-input>
+    <ion-note class="char-counter" [color]="isValid ? 'medium' : 'danger'">
+      {{ charCount }} / {{ charMax() }}
+    </ion-note>
+    <ion-button expand="block" [disabled]="!isValid" (click)="submit()">
+      <ion-icon name="send-outline" slot="start"></ion-icon>
+      {{ "statement.submit" | translate }}
+    </ion-button>
+    <ion-note color="medium" class="moderation-hint">
+      {{ "statement.moderation-hint" | translate }}
+    </ion-note>
+  </div>
+</div>

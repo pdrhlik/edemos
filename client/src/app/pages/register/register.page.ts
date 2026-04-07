@@ -42,7 +42,7 @@ export class RegisterPage {
 
     try {
       await this.auth.register(this.email, this.password, this.name, this.translate.currentLang);
-      this.router.navigateByUrl("/surveys");
+      this.router.navigateByUrl("/surveys", { replaceUrl: true });
     } catch {
       this.error.set(true);
       this.errorMessage.set(this.translate.instant("auth.register-failed"));

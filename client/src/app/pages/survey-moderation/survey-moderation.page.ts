@@ -1,0 +1,60 @@
+import { Component, inject, signal, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { TranslatePipe } from "@ngx-translate/core";
+import {
+  IonHeader, IonToolbar, IonTitle, IonContent,
+  IonButtons, IonBackButton, IonButton, IonIcon,
+  IonList, IonItem, IonLabel, IonText, IonItemSliding,
+  IonItemOptions, IonItemOption
+} from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
+import { checkmarkOutline, closeOutline } from "ionicons/icons";
+import { Statement } from "../../models/statement.model";
+import { ModerationService } from "../../services/moderation.service";
+
+@Component({
+  selector: "app-survey-moderation",
+  standalone: true,
+  imports: [
+    TranslatePipe,
+    IonHeader, IonToolbar, IonTitle, IonContent,
+    IonButtons, IonBackButton, IonButton, IonIcon,
+    IonList, IonItem, IonLabel, IonText, IonItemSliding,
+    IonItemOptions, IonItemOption
+  ],
+  templateUrl: "./survey-moderation.page.html",
+  styleUrls: ["./survey-moderation.page.scss"]
+})
+export class SurveyModerationPage implements OnInit {
+  private route = inject(ActivatedRoute);
+  private moderationService = inject(ModerationService);
+
+  surveyId = 0;
+  queue = signal<Statement[]>([]);
+
+  constructor() {
+    addIcons({ checkmarkOutline, closeOutline });
+  }
+
+  ngOnInit() {
+    this.surveyId = Number(this.route.snapshot.paramMap.get("id"));
+    if (this.surveyId) {
+      this.loadQueue();
+    }
+  }
+
+  async loadQueue() {
+    const items = await this.moderationService.getQueue(this.surveyId);
+    this.queue.set(items);
+  }
+
+  async approve(st: Statement) {
+    await this.moderationService.moderate(st.id, "approved");
+    this.queue.update(q => q.filter(s => s.id !== st.id));
+  }
+
+  async reject(st: Statement) {
+    await this.moderationService.moderate(st.id, "rejected");
+    this.queue.update(q => q.filter(s => s.id !== st.id));
+  }
+}

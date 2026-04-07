@@ -53,6 +53,19 @@ func (s *Store) GetNextStatement(ctx context.Context, surveyID, userID uint, ord
 		LIMIT 1`, surveyID, userID))
 }
 
+func (s *Store) ModerateStatement(ctx context.Context, statementID, moderatorID uint, status string) error {
+	q := s.DB.Query(`
+		UPDATE statement
+		SET status = ?, moderated_by = ?, moderated_at = NOW()
+		WHERE id = ?`, status, moderatorID, statementID)
+	_, err := q.Exec()
+	return err
+}
+
+func (s *Store) GetStatement(ctx context.Context, id uint) (*model.Statement, error) {
+	return queryOne[model.Statement](s.DB.Query(`SELECT * FROM statement WHERE id = ?`, id))
+}
+
 func (s *Store) CountStatements(ctx context.Context, surveyID uint, status string) (int, error) {
 	var count int
 	q := s.DB.Query(`SELECT COUNT(*) FROM statement WHERE survey_id = ? AND status = ?`, surveyID, status)

@@ -57,7 +57,10 @@
     "continue-voting": "Continue voting",
     "seed-statements": "Seed statements",
     "add-seed": "Add seed statement",
-    "char-count": "{{count}} / {{max}} characters"
+    "char-count": "{{count}} / {{max}} characters",
+    "your-statement": "Your statement",
+    "submitted-for-moderation": "Statement submitted for moderation",
+    "moderation-hint": "Your statement will be reviewed by a moderator before appearing in the survey"
   },
   "moderation": {
     "queue": "Moderation queue",

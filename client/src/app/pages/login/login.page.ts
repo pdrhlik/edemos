@@ -31,7 +31,7 @@ export class LoginPage {
     this.error.set(false);
     try {
       await this.auth.login(this.email, this.password);
-      this.router.navigateByUrl("/surveys");
+      this.router.navigateByUrl("/surveys", { replaceUrl: true });
     } catch {
       this.error.set(true);
     }

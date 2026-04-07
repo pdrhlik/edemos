@@ -63,6 +63,10 @@ func main() {
 		r.Post("/api/v1/survey/{id}/statement/seed", handler.ErrorHandler(h.AddSeedStatement()))
 		r.Get("/api/v1/survey/{id}/statement/next", handler.ErrorHandler(h.GetNextStatement()))
 
+		// Moderation routes
+		r.Get("/api/v1/survey/{id}/moderation", handler.ErrorHandler(h.GetModerationQueue()))
+		r.Patch("/api/v1/statement/{id}/moderate", handler.ErrorHandler(h.ModerateStatement()))
+
 		// Response routes
 		r.Post("/api/v1/statement/{id}/response", handler.ErrorHandler(h.SubmitResponse()))
 		r.Get("/api/v1/survey/{id}/progress", handler.ErrorHandler(h.GetVoteProgress()))

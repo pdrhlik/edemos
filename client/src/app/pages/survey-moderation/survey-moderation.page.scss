@@ -1,0 +1,35 @@
+.moderation-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60%;
+  text-align: center;
+
+  p {
+    font-size: 1.1rem;
+  }
+}
+
+.moderation-card {
+  background: var(--ion-color-light);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.statement-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0 0 0.75rem 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
