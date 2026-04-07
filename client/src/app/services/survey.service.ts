@@ -22,8 +22,8 @@ export class SurveyService {
     this.publicSurveys.set(items);
   }
 
-  async getSurvey(id: number): Promise<Survey> {
-    return firstValueFrom(this.api.get<Survey>(`/survey/${id}`));
+  async getSurvey(slug: string): Promise<Survey> {
+    return firstValueFrom(this.api.get<Survey>(`/survey/${slug}`));
   }
 
   async createSurvey(req: CreateSurveyRequest): Promise<Survey> {
@@ -32,8 +32,8 @@ export class SurveyService {
     return survey;
   }
 
-  async updateSurvey(id: number, req: UpdateSurveyRequest): Promise<Survey> {
-    const survey = await firstValueFrom(this.api.patch<Survey>(`/survey/${id}`, req));
+  async updateSurvey(slug: string, req: UpdateSurveyRequest): Promise<Survey> {
+    const survey = await firstValueFrom(this.api.patch<Survey>(`/survey/${slug}`, req));
     await this.loadSurveys();
     return survey;
   }

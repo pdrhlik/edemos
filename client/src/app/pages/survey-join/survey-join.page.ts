@@ -38,23 +38,23 @@ export class SurveyJoinPage implements OnInit {
   formData: Record<string, any> = {};
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get("id"));
-    if (id) {
-      this.loadSurvey(id);
+    const slug = this.route.snapshot.paramMap.get("slug");
+    if (slug) {
+      this.loadSurvey(slug);
     }
   }
 
-  async loadSurvey(id: number) {
+  async loadSurvey(slug: string) {
     // Check if already a participant — redirect back if so
     try {
-      await firstValueFrom(this.api.get(`/survey/${id}/participant/me`));
-      this.router.navigateByUrl(`/survey/${id}`, { replaceUrl: true });
+      await firstValueFrom(this.api.get(`/survey/${slug}/participant/me`));
+      this.router.navigateByUrl(`/survey/${slug}`, { replaceUrl: true });
       return;
     } catch {
       // Not a participant — continue to join flow
     }
 
-    const survey = await this.surveyService.getSurvey(id);
+    const survey = await this.surveyService.getSurvey(slug);
     this.survey.set(survey);
 
     if (survey.intakeConfig?.fields) {
@@ -80,8 +80,8 @@ export class SurveyJoinPage implements OnInit {
 
     const intakeData = Object.keys(this.formData).length > 0 ? this.formData : undefined;
     await firstValueFrom(
-      this.api.post(`/survey/${s.id}/join`, { intakeData: intakeData || null })
+      this.api.post(`/survey/${s.slug}/join`, { intakeData: intakeData || null })
     );
-    this.router.navigateByUrl(`/survey/${s.id}`, { replaceUrl: true });
+    this.router.navigateByUrl(`/survey/${s.slug}`, { replaceUrl: true });
   }
 }

@@ -52,25 +52,25 @@ export class SurveyDetailPage {
   }
 
   ionViewWillEnter() {
-    const id = Number(this.route.snapshot.paramMap.get("id"));
-    if (id) {
-      this.loadSurvey(id);
+    const slug = this.route.snapshot.paramMap.get("slug");
+    if (slug) {
+      this.loadSurvey(slug);
     }
   }
 
-  async loadSurvey(id: number) {
-    const survey = await this.surveyService.getSurvey(id);
+  async loadSurvey(slug: string) {
+    const survey = await this.surveyService.getSurvey(slug);
     this.survey.set(survey);
 
     // Check if current user is a participant
     try {
-      const p = await firstValueFrom(this.api.get<SurveyParticipant>(`/survey/${id}/participant/me`));
+      const p = await firstValueFrom(this.api.get<SurveyParticipant>(`/survey/${slug}/participant/me`));
       this.participant.set(p);
 
       // Load pending moderation count for admins/moderators
       if (p.role === "admin" || p.role === "moderator") {
         try {
-          const queue = await this.moderationService.getQueue(id);
+          const queue = await this.moderationService.getQueue(slug);
           this.pendingCount.set(queue.length);
         } catch {}
       }
@@ -105,7 +105,7 @@ export class SurveyDetailPage {
 
     const s = this.survey();
     if (!s) return;
-    const updated = await this.surveyService.updateSurvey(s.id, { status: "active" });
+    const updated = await this.surveyService.updateSurvey(s.slug, { status: "active" });
     this.survey.set(updated);
   }
 
@@ -118,7 +118,7 @@ export class SurveyDetailPage {
 
     const s = this.survey();
     if (!s) return;
-    const updated = await this.surveyService.updateSurvey(s.id, { status: "closed" });
+    const updated = await this.surveyService.updateSurvey(s.slug, { status: "closed" });
     this.survey.set(updated);
   }
 

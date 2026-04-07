@@ -2,6 +2,7 @@ export interface Survey {
   id: number;
   organizationId?: number;
   title: string;
+  slug: string;
   description?: string;
   status: string;
   visibility: string;
@@ -21,6 +22,7 @@ export interface Survey {
 export interface SurveyListItem {
   id: number;
   title: string;
+  slug: string;
   status: string;
   role: string;
   voted: number;

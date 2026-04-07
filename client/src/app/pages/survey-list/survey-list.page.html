@@ -13,8 +13,8 @@
     @if (surveyService.surveys().length > 0) {
       <h2 class="section-title">{{ "survey.my-surveys" | translate }}</h2>
       <ion-list>
-        @for (survey of surveyService.surveys(); track survey.id) {
-          <ion-item [routerLink]="'/survey/' + survey.id" detail="true" button>
+        @for (survey of surveyService.surveys(); track survey.slug) {
+          <ion-item [routerLink]="'/survey/' + survey.slug" detail="true" button>
             <ion-label>
               <h2>{{ survey.title }}</h2>
               <p class="survey-meta">
@@ -42,8 +42,8 @@
     @if (surveyService.publicSurveys().length > 0) {
       <h2 class="section-title">{{ "survey.discover" | translate }}</h2>
       <ion-list>
-        @for (survey of surveyService.publicSurveys(); track survey.id) {
-          <ion-item [routerLink]="'/survey/' + survey.id" detail="true" button>
+        @for (survey of surveyService.publicSurveys(); track survey.slug) {
+          <ion-item [routerLink]="'/survey/' + survey.slug" detail="true" button>
             <ion-label>
               <h2>{{ survey.title }}</h2>
             </ion-label>

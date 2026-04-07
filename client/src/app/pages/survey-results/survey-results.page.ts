@@ -26,22 +26,22 @@ export class SurveyResultsPage implements OnInit {
   private route = inject(ActivatedRoute);
   private resultsService = inject(ResultsService);
 
-  surveyId = 0;
+  surveySlug = "";
   stats = signal<SurveyStats | null>(null);
   results = signal<StatementResult[]>([]);
   sortBy = signal<string>("votes");
   error = signal<string | null>(null);
 
   ngOnInit() {
-    this.surveyId = Number(this.route.snapshot.paramMap.get("id"));
-    if (this.surveyId) {
+    this.surveySlug = this.route.snapshot.paramMap.get("slug") || "";
+    if (this.surveySlug) {
       this.loadResults();
     }
   }
 
   async loadResults() {
     try {
-      const res = await this.resultsService.getResults(this.surveyId);
+      const res = await this.resultsService.getResults(this.surveySlug);
       this.stats.set(res.stats);
       this.results.set(res.statements);
     } catch (e: any) {

@@ -45,7 +45,7 @@
 
         <!-- Moderation link for admins/moderators -->
         @if (s.status === "active" && pendingCount() > 0) {
-          <ion-button expand="block" fill="outline" [routerLink]="'/survey/' + s.id + '/moderation'">
+          <ion-button expand="block" fill="outline" [routerLink]="'/survey/' + s.slug + '/moderation'">
             <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
             {{ "moderation.queue" | translate }}
             <ion-badge slot="end" color="warning">{{ pendingCount() }}</ion-badge>
@@ -55,7 +55,7 @@
         <!-- Seed statements for draft surveys -->
         @if (s.status === "draft") {
           <app-seed-statements
-            [surveyId]="s.id"
+            [surveySlug]="s.slug"
             [charMin]="s.statementCharMin"
             [charMax]="s.statementCharMax"
           ></app-seed-statements>
@@ -65,7 +65,7 @@
       <!-- Join button for non-participants -->
       @if (!isParticipantOrAdmin && s.status === "active") {
         <div class="actions">
-          <ion-button expand="block" [routerLink]="'/survey/' + s.id + '/join'">
+          <ion-button expand="block" [routerLink]="'/survey/' + s.slug + '/join'">
             {{ "survey.join" | translate }}
           </ion-button>
         </div>
@@ -74,23 +74,23 @@
       <!-- Participant actions -->
       @if (isParticipantOrAdmin && s.status === "active") {
         <div class="actions">
-          <ion-button expand="block" [routerLink]="'/survey/' + s.id + '/vote'">
+          <ion-button expand="block" [routerLink]="'/survey/' + s.slug + '/vote'">
             {{ "statement.start-voting" | translate }}
           </ion-button>
         </div>
 
         <app-submit-statement
-          [surveyId]="s.id"
+          [surveySlug]="s.slug"
           [charMin]="s.statementCharMin"
           [charMax]="s.statementCharMax"
-          (statementSubmitted)="loadSurvey(s.id)"
+          (statementSubmitted)="loadSurvey(s.slug)"
         ></app-submit-statement>
       }
 
       <!-- Results button -->
       @if (isParticipantOrAdmin && (s.status === "active" || s.status === "closed")) {
         <div class="actions">
-          <ion-button expand="block" fill="outline" [routerLink]="'/survey/' + s.id + '/results'">
+          <ion-button expand="block" fill="outline" [routerLink]="'/survey/' + s.slug + '/results'">
             {{ "results.results" | translate }}
           </ion-button>
         </div>

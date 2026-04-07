@@ -20,14 +20,27 @@ func (s *Store) CreateSurvey(ctx context.Context, survey *model.Survey) (uint, e
 	return uint(id), nil
 }
 
+func (s *Store) GetSurveyBySlug(ctx context.Context, slug string) (*model.Survey, error) {
+	return queryOne[model.Survey](s.DB.Query(`SELECT * FROM survey WHERE slug = ?`, slug))
+}
+
 func (s *Store) GetSurvey(ctx context.Context, id uint) (*model.Survey, error) {
 	return queryOne[model.Survey](s.DB.Query(`SELECT * FROM survey WHERE id = ?`, id))
+}
+
+func (s *Store) SlugExists(ctx context.Context, slug string) (bool, error) {
+	var count int
+	q := s.DB.Query(`SELECT COUNT(*) FROM survey WHERE slug = ?`, slug)
+	if err := q.ScanRow(&count); err != nil {
+		return false, err
+	}
+	return count > 0, nil
 }
 
 func (s *Store) ListSurveysByUser(ctx context.Context, userID uint) ([]model.SurveyListItem, error) {
 	items := make([]model.SurveyListItem, 0)
 	q := s.DB.Query(`
-		SELECT s.id, s.title, s.status, sp.role,
+		SELECT s.id, s.title, s.slug, s.status, sp.role,
 			(SELECT COUNT(*) FROM response r
 				JOIN statement st ON st.id = r.statement_id
 				WHERE st.survey_id = s.id AND r.user_id = sp.user_id) AS voted,
@@ -47,7 +60,7 @@ func (s *Store) ListSurveysByUser(ctx context.Context, userID uint) ([]model.Sur
 func (s *Store) ListPublicSurveys(ctx context.Context, userID uint) ([]model.SurveyListItem, error) {
 	items := make([]model.SurveyListItem, 0)
 	q := s.DB.Query(`
-		SELECT s.id, s.title, s.status, '' AS role, 0 AS voted, 0 AS total, s.created_at
+		SELECT s.id, s.title, s.slug, s.status, '' AS role, 0 AS voted, 0 AS total, s.created_at
 		FROM survey s
 		WHERE s.status = 'active'
 			AND s.visibility IN ('public', 'unlisted')

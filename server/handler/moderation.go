@@ -8,15 +8,17 @@ import (
 
 func (h *Handler) GetModerationQueue() AppHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		surveyID, err := parseIDParam(r, "id")
+		survey, err := h.getSurveyFromSlug(w, r)
 		if err != nil {
-			return writeError(w, http.StatusBadRequest, "invalid survey id")
+			return err
+		}
+		if survey == nil {
+			return nil
 		}
 
 		user := identity.GetUserFromContext(r.Context())
 
-		// Verify user is admin or moderator
-		participant, err := h.Store.GetParticipant(r.Context(), surveyID, user.ID)
+		participant, err := h.Store.GetParticipant(r.Context(), survey.ID, user.ID)
 		if err != nil {
 			return err
 		}
@@ -24,7 +26,7 @@ func (h *Handler) GetModerationQueue() AppHandlerFunc {
 			return writeError(w, http.StatusForbidden, "only admins and moderators can access moderation")
 		}
 
-		items, err := h.Store.ListStatementsBySurvey(r.Context(), surveyID, "pending")
+		items, err := h.Store.ListStatementsBySurvey(r.Context(), survey.ID, "pending")
 		if err != nil {
 			return err
 		}

@@ -34,7 +34,7 @@ export class SurveyVotePage implements OnInit {
   private statementService = inject(StatementService);
   private responseService = inject(ResponseService);
 
-  surveyId = 0;
+  surveySlug = "";
   currentStatement = signal<Statement | null>(null);
   progress = signal<VoteProgress>({ voted: 0, total: 0 });
   isImportant = false;
@@ -45,15 +45,15 @@ export class SurveyVotePage implements OnInit {
   }
 
   ngOnInit() {
-    this.surveyId = Number(this.route.snapshot.paramMap.get("id"));
-    if (this.surveyId) {
+    this.surveySlug = this.route.snapshot.paramMap.get("slug") || "";
+    if (this.surveySlug) {
       this.loadNext();
       this.loadProgress();
     }
   }
 
   async loadNext() {
-    const st = await this.statementService.getNextStatement(this.surveyId);
+    const st = await this.statementService.getNextStatement(this.surveySlug);
     if (st) {
       this.currentStatement.set(st);
       this.isImportant = false;
@@ -65,7 +65,7 @@ export class SurveyVotePage implements OnInit {
   }
 
   async loadProgress() {
-    const p = await this.responseService.getProgress(this.surveyId);
+    const p = await this.responseService.getProgress(this.surveySlug);
     this.progress.set(p);
   }
 

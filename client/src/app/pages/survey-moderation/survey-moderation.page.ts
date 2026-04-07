@@ -29,7 +29,7 @@ export class SurveyModerationPage implements OnInit {
   private route = inject(ActivatedRoute);
   private moderationService = inject(ModerationService);
 
-  surveyId = 0;
+  surveySlug = "";
   queue = signal<Statement[]>([]);
 
   constructor() {
@@ -37,14 +37,14 @@ export class SurveyModerationPage implements OnInit {
   }
 
   ngOnInit() {
-    this.surveyId = Number(this.route.snapshot.paramMap.get("id"));
-    if (this.surveyId) {
+    this.surveySlug = this.route.snapshot.paramMap.get("slug") || "";
+    if (this.surveySlug) {
       this.loadQueue();
     }
   }
 
   async loadQueue() {
-    const items = await this.moderationService.getQueue(this.surveyId);
+    const items = await this.moderationService.getQueue(this.surveySlug);
     this.queue.set(items);
   }
 

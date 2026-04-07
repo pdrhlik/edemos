@@ -9,8 +9,8 @@ import { Statement } from "../models/statement.model";
 export class ModerationService {
   private api = inject(ApiService);
 
-  async getQueue(surveyId: number): Promise<Statement[]> {
-    return firstValueFrom(this.api.get<Statement[]>(`/survey/${surveyId}/moderation`));
+  async getQueue(slug: string): Promise<Statement[]> {
+    return firstValueFrom(this.api.get<Statement[]>(`/survey/${slug}/moderation`));
   }
 
   async moderate(statementId: number, status: "approved" | "rejected"): Promise<Statement> {

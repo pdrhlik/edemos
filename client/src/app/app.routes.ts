@@ -26,27 +26,27 @@ export const routes: Routes = [
     loadComponent: () => import("./pages/survey-create/survey-create.page").then(m => m.SurveyCreatePage),
   },
   {
-    path: "survey/:id",
+    path: "survey/:slug",
     canActivate: [authGuard],
     loadComponent: () => import("./pages/survey-detail/survey-detail.page").then(m => m.SurveyDetailPage),
   },
   {
-    path: "survey/:id/results",
+    path: "survey/:slug/results",
     canActivate: [authGuard],
     loadComponent: () => import("./pages/survey-results/survey-results.page").then(m => m.SurveyResultsPage),
   },
   {
-    path: "survey/:id/moderation",
+    path: "survey/:slug/moderation",
     canActivate: [authGuard],
     loadComponent: () => import("./pages/survey-moderation/survey-moderation.page").then(m => m.SurveyModerationPage),
   },
   {
-    path: "survey/:id/vote",
+    path: "survey/:slug/vote",
     canActivate: [authGuard],
     loadComponent: () => import("./pages/survey-vote/survey-vote.page").then(m => m.SurveyVotePage),
   },
   {
-    path: "survey/:id/join",
+    path: "survey/:slug/join",
     canActivate: [authGuard],
     loadComponent: () => import("./pages/survey-join/survey-join.page").then(m => m.SurveyJoinPage),
   },

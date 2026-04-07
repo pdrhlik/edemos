@@ -24,7 +24,7 @@ export class SubmitStatementComponent {
   private toastController = inject(ToastController);
   private translate = inject(TranslateService);
 
-  surveyId = input.required<number>();
+  surveySlug = input.required<string>();
   charMin = input<number>(20);
   charMax = input<number>(150);
 
@@ -49,7 +49,7 @@ export class SubmitStatementComponent {
   async submit() {
     if (!this.isValid) return;
 
-    await this.statementService.submitStatement(this.surveyId(), this.newText.trim());
+    await this.statementService.submitStatement(this.surveySlug(), this.newText.trim());
     this.newText = "";
     this.submitted.set(true);
     this.statementSubmitted.emit();

@@ -19,7 +19,7 @@ export class ResponseService {
     );
   }
 
-  async getProgress(surveyId: number): Promise<VoteProgress> {
-    return firstValueFrom(this.api.get<VoteProgress>(`/survey/${surveyId}/progress`));
+  async getProgress(slug: string): Promise<VoteProgress> {
+    return firstValueFrom(this.api.get<VoteProgress>(`/survey/${slug}/progress`));
   }
 }

@@ -57,14 +57,17 @@ func (h *Handler) SubmitResponse() AppHandlerFunc {
 
 func (h *Handler) GetVoteProgress() AppHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		surveyID, err := parseIDParam(r, "id")
+		survey, err := h.getSurveyFromSlug(w, r)
 		if err != nil {
-			return writeError(w, http.StatusBadRequest, "invalid survey id")
+			return err
+		}
+		if survey == nil {
+			return nil
 		}
 
 		user := identity.GetUserFromContext(r.Context())
 
-		progress, err := h.Store.GetVoteProgress(r.Context(), surveyID, user.ID)
+		progress, err := h.Store.GetVoteProgress(r.Context(), survey.ID, user.ID)
 		if err != nil {
 			return err
 		}

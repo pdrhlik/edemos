@@ -14,29 +14,23 @@ type ResultsResponse struct {
 
 func (h *Handler) GetResults() AppHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		surveyID, err := parseIDParam(r, "id")
-		if err != nil {
-			return writeError(w, http.StatusBadRequest, "invalid survey id")
-		}
-
-		user := identity.GetUserFromContext(r.Context())
-
-		survey, err := h.Store.GetSurvey(r.Context(), surveyID)
+		survey, err := h.getSurveyFromSlug(w, r)
 		if err != nil {
 			return err
 		}
 		if survey == nil {
-			return writeError(w, http.StatusNotFound, "survey not found")
+			return nil
 		}
 
-		// Enforce result_visibility rules
+		user := identity.GetUserFromContext(r.Context())
+
 		switch survey.ResultVisibility {
 		case "after_close":
 			if survey.Status != "closed" {
 				return writeError(w, http.StatusForbidden, "results available after survey closes")
 			}
 		case "after_completion":
-			progress, err := h.Store.GetVoteProgress(r.Context(), surveyID, user.ID)
+			progress, err := h.Store.GetVoteProgress(r.Context(), survey.ID, user.ID)
 			if err != nil {
 				return err
 			}
@@ -44,15 +38,15 @@ func (h *Handler) GetResults() AppHandlerFunc {
 				return writeError(w, http.StatusForbidden, "complete all votes to see results")
 			}
 		case "continuous":
-			// Always visible — no restrictions
+			// Always visible
 		}
 
-		stats, err := h.Store.GetSurveyStats(r.Context(), surveyID)
+		stats, err := h.Store.GetSurveyStats(r.Context(), survey.ID)
 		if err != nil {
 			return err
 		}
 
-		statements, err := h.Store.GetSurveyResults(r.Context(), surveyID)
+		statements, err := h.Store.GetSurveyResults(r.Context(), survey.ID)
 		if err != nil {
 			return err
 		}
@@ -66,12 +60,15 @@ func (h *Handler) GetResults() AppHandlerFunc {
 
 func (h *Handler) GetSurveyStats() AppHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		surveyID, err := parseIDParam(r, "id")
+		survey, err := h.getSurveyFromSlug(w, r)
 		if err != nil {
-			return writeError(w, http.StatusBadRequest, "invalid survey id")
+			return err
+		}
+		if survey == nil {
+			return nil
 		}
 
-		stats, err := h.Store.GetSurveyStats(r.Context(), surveyID)
+		stats, err := h.Store.GetSurveyStats(r.Context(), survey.ID)
 		if err != nil {
 			return err
 		}

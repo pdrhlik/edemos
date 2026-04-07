@@ -53,28 +53,28 @@ func main() {
 		r.Get("/api/v1/survey", handler.ErrorHandler(h.ListSurveys()))
 		r.Post("/api/v1/survey", handler.ErrorHandler(h.CreateSurvey()))
 		r.Get("/api/v1/survey/public", handler.ErrorHandler(h.ListPublicSurveys()))
-		r.Get("/api/v1/survey/{id}", handler.ErrorHandler(h.GetSurvey()))
-		r.Patch("/api/v1/survey/{id}", handler.ErrorHandler(h.UpdateSurvey()))
-		r.Post("/api/v1/survey/{id}/join", handler.ErrorHandler(h.JoinSurvey()))
-		r.Get("/api/v1/survey/{id}/participant/me", handler.ErrorHandler(h.GetMyParticipation()))
+		r.Get("/api/v1/survey/{slug}", handler.ErrorHandler(h.GetSurvey()))
+		r.Patch("/api/v1/survey/{slug}", handler.ErrorHandler(h.UpdateSurvey()))
+		r.Post("/api/v1/survey/{slug}/join", handler.ErrorHandler(h.JoinSurvey()))
+		r.Get("/api/v1/survey/{slug}/participant/me", handler.ErrorHandler(h.GetMyParticipation()))
 
 		// Statement routes
-		r.Get("/api/v1/survey/{id}/statement", handler.ErrorHandler(h.ListStatements()))
-		r.Post("/api/v1/survey/{id}/statement", handler.ErrorHandler(h.SubmitStatement()))
-		r.Post("/api/v1/survey/{id}/statement/seed", handler.ErrorHandler(h.AddSeedStatement()))
-		r.Get("/api/v1/survey/{id}/statement/next", handler.ErrorHandler(h.GetNextStatement()))
+		r.Get("/api/v1/survey/{slug}/statement", handler.ErrorHandler(h.ListStatements()))
+		r.Post("/api/v1/survey/{slug}/statement", handler.ErrorHandler(h.SubmitStatement()))
+		r.Post("/api/v1/survey/{slug}/statement/seed", handler.ErrorHandler(h.AddSeedStatement()))
+		r.Get("/api/v1/survey/{slug}/statement/next", handler.ErrorHandler(h.GetNextStatement()))
 
 		// Moderation routes
-		r.Get("/api/v1/survey/{id}/moderation", handler.ErrorHandler(h.GetModerationQueue()))
+		r.Get("/api/v1/survey/{slug}/moderation", handler.ErrorHandler(h.GetModerationQueue()))
 		r.Patch("/api/v1/statement/{id}/moderate", handler.ErrorHandler(h.ModerateStatement()))
 
 		// Results routes
-		r.Get("/api/v1/survey/{id}/results", handler.ErrorHandler(h.GetResults()))
-		r.Get("/api/v1/survey/{id}/stats", handler.ErrorHandler(h.GetSurveyStats()))
+		r.Get("/api/v1/survey/{slug}/results", handler.ErrorHandler(h.GetResults()))
+		r.Get("/api/v1/survey/{slug}/stats", handler.ErrorHandler(h.GetSurveyStats()))
 
 		// Response routes
 		r.Post("/api/v1/statement/{id}/response", handler.ErrorHandler(h.SubmitResponse()))
-		r.Get("/api/v1/survey/{id}/progress", handler.ErrorHandler(h.GetVoteProgress()))
+		r.Get("/api/v1/survey/{slug}/progress", handler.ErrorHandler(h.GetVoteProgress()))
 	})
 
 	log.Println("server listening on :8080")

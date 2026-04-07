@@ -24,7 +24,7 @@ import { StatementService } from "../../services/statement.service";
 export class SeedStatementsComponent implements OnInit {
   private statementService = inject(StatementService);
 
-  surveyId = input.required<number>();
+  surveySlug = input.required<string>();
   charMin = input<number>(20);
   charMax = input<number>(150);
 
@@ -40,7 +40,7 @@ export class SeedStatementsComponent implements OnInit {
   }
 
   async loadStatements() {
-    const items = await this.statementService.listStatements(this.surveyId());
+    const items = await this.statementService.listStatements(this.surveySlug());
     this.statements.set(items);
   }
 
@@ -56,7 +56,7 @@ export class SeedStatementsComponent implements OnInit {
   async addStatement() {
     if (!this.isValid) return;
 
-    await this.statementService.addSeedStatement(this.surveyId(), this.newText.trim());
+    await this.statementService.addSeedStatement(this.surveySlug(), this.newText.trim());
     this.newText = "";
     await this.loadStatements();
   }

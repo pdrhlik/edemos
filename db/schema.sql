@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS survey (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     organization_id INT UNSIGNED DEFAULT NULL,
     title VARCHAR(500) NOT NULL,
+    slug VARCHAR(200) DEFAULT NULL UNIQUE,
     description TEXT DEFAULT NULL,
     status ENUM('draft', 'active', 'closed') NOT NULL DEFAULT 'draft',
     visibility ENUM('public', 'private', 'unlisted') NOT NULL DEFAULT 'private',

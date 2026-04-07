@@ -9,6 +9,7 @@ type Survey struct {
 	ID               uint             `db:"id,selectonly" json:"id"`
 	OrganizationID   *uint            `db:"organization_id" json:"organizationId,omitempty"`
 	Title            string           `db:"title" json:"title"`
+	Slug             string           `db:"slug" json:"slug"`
 	Description      *string          `db:"description" json:"description,omitempty"`
 	Status           string           `db:"status" json:"status"`
 	Visibility       string           `db:"visibility" json:"visibility"`
@@ -57,6 +58,7 @@ type UpdateSurveyRequest struct {
 type SurveyListItem struct {
 	ID        uint      `db:"id" json:"id"`
 	Title     string    `db:"title" json:"title"`
+	Slug      string    `db:"slug" json:"slug"`
 	Status    string    `db:"status" json:"status"`
 	Role      string    `db:"role" json:"role"`
 	Voted     int       `db:"voted" json:"voted"`

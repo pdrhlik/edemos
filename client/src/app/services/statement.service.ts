@@ -9,21 +9,21 @@ import { Statement } from "../models/statement.model";
 export class StatementService {
   private api = inject(ApiService);
 
-  async listStatements(surveyId: number): Promise<Statement[]> {
-    return firstValueFrom(this.api.get<Statement[]>(`/survey/${surveyId}/statement`));
+  async listStatements(slug: string): Promise<Statement[]> {
+    return firstValueFrom(this.api.get<Statement[]>(`/survey/${slug}/statement`));
   }
 
-  async addSeedStatement(surveyId: number, text: string): Promise<Statement> {
-    return firstValueFrom(this.api.post<Statement>(`/survey/${surveyId}/statement/seed`, { text }));
+  async addSeedStatement(slug: string, text: string): Promise<Statement> {
+    return firstValueFrom(this.api.post<Statement>(`/survey/${slug}/statement/seed`, { text }));
   }
 
-  async submitStatement(surveyId: number, text: string): Promise<Statement> {
-    return firstValueFrom(this.api.post<Statement>(`/survey/${surveyId}/statement`, { text }));
+  async submitStatement(slug: string, text: string): Promise<Statement> {
+    return firstValueFrom(this.api.post<Statement>(`/survey/${slug}/statement`, { text }));
   }
 
-  async getNextStatement(surveyId: number): Promise<Statement | null> {
+  async getNextStatement(slug: string): Promise<Statement | null> {
     try {
-      return await firstValueFrom(this.api.get<Statement>(`/survey/${surveyId}/statement/next`));
+      return await firstValueFrom(this.api.get<Statement>(`/survey/${slug}/statement/next`));
     } catch (e: any) {
       if (e?.status === 204) return null;
       throw e;

@@ -9,7 +9,7 @@ import { ResultsResponse } from "../models/results.model";
 export class ResultsService {
   private api = inject(ApiService);
 
-  async getResults(surveyId: number): Promise<ResultsResponse> {
-    return firstValueFrom(this.api.get<ResultsResponse>(`/survey/${surveyId}/results`));
+  async getResults(slug: string): Promise<ResultsResponse> {
+    return firstValueFrom(this.api.get<ResultsResponse>(`/survey/${slug}/results`));
   }
 }

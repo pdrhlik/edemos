@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -9,7 +10,40 @@ import (
 	"github.com/mibk/dali"
 	"github.com/pdrhlik/edemos/server/identity"
 	"github.com/pdrhlik/edemos/server/model"
+	"github.com/pdrhlik/edemos/server/slug"
 )
+
+// getSurveyFromSlug resolves the survey from the {slug} URL param.
+func (h *Handler) getSurveyFromSlug(w http.ResponseWriter, r *http.Request) (*model.Survey, error) {
+	s := chi.URLParam(r, "slug")
+	survey, err := h.Store.GetSurveyBySlug(r.Context(), s)
+	if err != nil {
+		return nil, err
+	}
+	if survey == nil {
+		writeError(w, http.StatusNotFound, "survey not found")
+		return nil, nil
+	}
+	return survey, nil
+}
+
+func (h *Handler) generateUniqueSlug(ctx context.Context, title string) (string, error) {
+	base := slug.Generate(title)
+	candidate := base
+
+	exists, err := h.Store.SlugExists(ctx, candidate)
+	if err != nil {
+		return "", err
+	}
+	for exists {
+		candidate = slug.WithSuffix(base)
+		exists, err = h.Store.SlugExists(ctx, candidate)
+		if err != nil {
+			return "", err
+		}
+	}
+	return candidate, nil
+}
 
 func (h *Handler) CreateSurvey() AppHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
@@ -23,6 +57,11 @@ func (h *Handler) CreateSurvey() AppHandlerFunc {
 		}
 
 		user := identity.GetUserFromContext(r.Context())
+
+		surveySlug, err := h.generateUniqueSlug(r.Context(), in.Title)
+		if err != nil {
+			return err
+		}
 
 		charMin := uint(20)
 		charMax := uint(150)
@@ -56,6 +95,7 @@ func (h *Handler) CreateSurvey() AppHandlerFunc {
 
 		survey := &model.Survey{
 			Title:            in.Title,
+			Slug:             surveySlug,
 			Description:      in.Description,
 			Status:           "draft",
 			Visibility:       visibility,
@@ -114,34 +154,30 @@ func (h *Handler) ListPublicSurveys() AppHandlerFunc {
 
 func (h *Handler) GetSurvey() AppHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		id, err := parseIDParam(r, "id")
-		if err != nil {
-			return writeError(w, http.StatusBadRequest, "invalid survey id")
-		}
-
-		survey, err := h.Store.GetSurvey(r.Context(), id)
+		survey, err := h.getSurveyFromSlug(w, r)
 		if err != nil {
 			return err
 		}
 		if survey == nil {
-			return writeError(w, http.StatusNotFound, "survey not found")
+			return nil // 404 already written
 		}
-
 		return writeJSON(w, http.StatusOK, survey)
 	}
 }
 
 func (h *Handler) UpdateSurvey() AppHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		id, err := parseIDParam(r, "id")
+		survey, err := h.getSurveyFromSlug(w, r)
 		if err != nil {
-			return writeError(w, http.StatusBadRequest, "invalid survey id")
+			return err
+		}
+		if survey == nil {
+			return nil
 		}
 
 		user := identity.GetUserFromContext(r.Context())
 
-		// Verify user is survey admin
-		participant, err := h.Store.GetParticipant(r.Context(), id, user.ID)
+		participant, err := h.Store.GetParticipant(r.Context(), survey.ID, user.ID)
 		if err != nil {
 			return err
 		}
@@ -196,27 +232,30 @@ func (h *Handler) UpdateSurvey() AppHandlerFunc {
 			return writeError(w, http.StatusBadRequest, "no fields to update")
 		}
 
-		if err := h.Store.UpdateSurvey(r.Context(), id, fields); err != nil {
+		if err := h.Store.UpdateSurvey(r.Context(), survey.ID, fields); err != nil {
 			return err
 		}
 
-		survey, err := h.Store.GetSurvey(r.Context(), id)
+		updated, err := h.Store.GetSurvey(r.Context(), survey.ID)
 		if err != nil {
 			return err
 		}
-		return writeJSON(w, http.StatusOK, survey)
+		return writeJSON(w, http.StatusOK, updated)
 	}
 }
 
 func (h *Handler) GetMyParticipation() AppHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		surveyID, err := parseIDParam(r, "id")
+		survey, err := h.getSurveyFromSlug(w, r)
 		if err != nil {
-			return writeError(w, http.StatusBadRequest, "invalid survey id")
+			return err
+		}
+		if survey == nil {
+			return nil
 		}
 
 		user := identity.GetUserFromContext(r.Context())
-		p, err := h.Store.GetParticipant(r.Context(), surveyID, user.ID)
+		p, err := h.Store.GetParticipant(r.Context(), survey.ID, user.ID)
 		if err != nil {
 			return err
 		}
@@ -230,26 +269,21 @@ func (h *Handler) GetMyParticipation() AppHandlerFunc {
 
 func (h *Handler) JoinSurvey() AppHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		surveyID, err := parseIDParam(r, "id")
-		if err != nil {
-			return writeError(w, http.StatusBadRequest, "invalid survey id")
-		}
-
-		user := identity.GetUserFromContext(r.Context())
-
-		survey, err := h.Store.GetSurvey(r.Context(), surveyID)
+		survey, err := h.getSurveyFromSlug(w, r)
 		if err != nil {
 			return err
 		}
 		if survey == nil {
-			return writeError(w, http.StatusNotFound, "survey not found")
+			return nil
 		}
+
+		user := identity.GetUserFromContext(r.Context())
+
 		if survey.Status != "active" {
 			return writeError(w, http.StatusBadRequest, "survey is not active")
 		}
 
-		// Check if already a participant
-		isParticipant, err := h.Store.IsParticipant(r.Context(), surveyID, user.ID)
+		isParticipant, err := h.Store.IsParticipant(r.Context(), survey.ID, user.ID)
 		if err != nil {
 			return err
 		}
@@ -257,17 +291,15 @@ func (h *Handler) JoinSurvey() AppHandlerFunc {
 			return writeError(w, http.StatusConflict, "already a participant")
 		}
 
-		// Parse optional intake data
 		var body struct {
 			IntakeData *json.RawMessage `json:"intakeData,omitempty"`
 		}
 		if err := parseJSON(r, &body); err != nil {
-			// Allow empty body for surveys without intake config
 			body.IntakeData = nil
 		}
 
 		p := &model.SurveyParticipant{
-			SurveyID:   surveyID,
+			SurveyID:   survey.ID,
 			UserID:     user.ID,
 			Role:       "participant",
 			IntakeData: body.IntakeData,
