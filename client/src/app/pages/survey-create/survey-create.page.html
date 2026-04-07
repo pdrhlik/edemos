@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/surveys"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ "survey.create" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()" class="survey-form">
+      <ion-input
+        type="text"
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="title"
+        name="title"
+        [label]="'survey.title' | translate"
+      ></ion-input>
+
+      <ion-textarea
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="description"
+        name="description"
+        [label]="'survey.description' | translate"
+        [autoGrow]="true"
+        [rows]="3"
+      ></ion-textarea>
+
+      @if (error()) {
+        <ion-text color="danger">
+          <p class="error-message">{{ "common.error" | translate }}</p>
+        </ion-text>
+      }
+
+      <ion-button expand="block" type="submit">
+        {{ "survey.create" | translate }}
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

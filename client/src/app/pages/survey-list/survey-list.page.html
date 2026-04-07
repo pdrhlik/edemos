@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ "survey.surveys" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (surveyService.surveys().length === 0) {
+    <div class="empty-state">
+      <ion-text color="medium">
+        <p>{{ "survey.no-surveys" | translate }}</p>
+      </ion-text>
+    </div>
+  } @else {
+    <ion-list>
+      @for (survey of surveyService.surveys(); track survey.id) {
+        <ion-item [routerLink]="'/survey/' + survey.id" detail="true" button>
+          <ion-label>
+            <h2>{{ survey.title }}</h2>
+            <p>{{ survey.role }}</p>
+          </ion-label>
+          <ion-badge slot="end" [color]="statusColor(survey.status)">
+            {{ "survey." + survey.status | translate }}
+          </ion-badge>
+        </ion-item>
+      }
+    </ion-list>
+  }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button routerLink="/survey/create">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

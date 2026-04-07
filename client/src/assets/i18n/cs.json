@@ -38,6 +38,8 @@
     "closed": "Uzavřený",
     "activate": "Aktivovat",
     "close-survey": "Uzavřít průzkum",
+    "activate-confirm": "Opravdu chcete aktivovat tento průzkum? Účastníci se budou moci připojit a hlasovat.",
+    "close-confirm": "Opravdu chcete uzavřít tento průzkum? Další odpovědi nebudou přijímány.",
     "join": "Připojit se k průzkumu",
     "settings": "Nastavení",
     "participants": "Účastníci",

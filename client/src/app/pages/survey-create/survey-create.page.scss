@@ -1,0 +1,19 @@
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.survey-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  ion-button {
+    margin-top: 0.5rem;
+  }
+}
+
+.error-message {
+  margin: 0;
+  font-size: 0.875rem;
+}

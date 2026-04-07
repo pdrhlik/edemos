@@ -48,7 +48,12 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.Auth(cfg.JWTSecret, s))
 		r.Get("/api/v1/auth/me", handler.ErrorHandler(h.Me()))
-		// Survey, statement, moderation routes will go here
+
+		// Survey routes
+		r.Get("/api/v1/survey", handler.ErrorHandler(h.ListSurveys()))
+		r.Post("/api/v1/survey", handler.ErrorHandler(h.CreateSurvey()))
+		r.Get("/api/v1/survey/{id}", handler.ErrorHandler(h.GetSurvey()))
+		r.Patch("/api/v1/survey/{id}", handler.ErrorHandler(h.UpdateSurvey()))
 	})
 
 	log.Println("server listening on :8080")
