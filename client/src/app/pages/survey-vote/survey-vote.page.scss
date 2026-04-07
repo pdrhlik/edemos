@@ -1,0 +1,51 @@
+.vote-container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+ion-progress-bar {
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
+.statement-card {
+  margin: 0 0 1.5rem 0;
+
+  ion-card-content {
+    padding: 2rem 1.5rem;
+  }
+}
+
+.statement-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
+}
+
+.important-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.vote-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vote-btn {
+  --border-radius: 8px;
+  font-size: 1rem;
+}
+
+.done-state {
+  text-align: center;
+  padding-top: 20vh;
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+  }
+}

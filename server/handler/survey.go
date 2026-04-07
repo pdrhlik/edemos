@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -193,6 +194,79 @@ func (h *Handler) UpdateSurvey() AppHandlerFunc {
 			return err
 		}
 		return writeJSON(w, http.StatusOK, survey)
+	}
+}
+
+func (h *Handler) GetMyParticipation() AppHandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		surveyID, err := parseIDParam(r, "id")
+		if err != nil {
+			return writeError(w, http.StatusBadRequest, "invalid survey id")
+		}
+
+		user := identity.GetUserFromContext(r.Context())
+		p, err := h.Store.GetParticipant(r.Context(), surveyID, user.ID)
+		if err != nil {
+			return err
+		}
+		if p == nil {
+			return writeError(w, http.StatusNotFound, "not a participant")
+		}
+
+		return writeJSON(w, http.StatusOK, p)
+	}
+}
+
+func (h *Handler) JoinSurvey() AppHandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		surveyID, err := parseIDParam(r, "id")
+		if err != nil {
+			return writeError(w, http.StatusBadRequest, "invalid survey id")
+		}
+
+		user := identity.GetUserFromContext(r.Context())
+
+		survey, err := h.Store.GetSurvey(r.Context(), surveyID)
+		if err != nil {
+			return err
+		}
+		if survey == nil {
+			return writeError(w, http.StatusNotFound, "survey not found")
+		}
+		if survey.Status != "active" {
+			return writeError(w, http.StatusBadRequest, "survey is not active")
+		}
+
+		// Check if already a participant
+		isParticipant, err := h.Store.IsParticipant(r.Context(), surveyID, user.ID)
+		if err != nil {
+			return err
+		}
+		if isParticipant {
+			return writeError(w, http.StatusConflict, "already a participant")
+		}
+
+		// Parse optional intake data
+		var body struct {
+			IntakeData *json.RawMessage `json:"intakeData,omitempty"`
+		}
+		if err := parseJSON(r, &body); err != nil {
+			// Allow empty body for surveys without intake config
+			body.IntakeData = nil
+		}
+
+		p := &model.SurveyParticipant{
+			SurveyID:   surveyID,
+			UserID:     user.ID,
+			Role:       "participant",
+			IntakeData: body.IntakeData,
+		}
+
+		if err := h.Store.JoinSurvey(r.Context(), p); err != nil {
+			return err
+		}
+
+		return writeJSON(w, http.StatusCreated, p)
 	}
 }
 

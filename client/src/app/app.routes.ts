@@ -26,6 +26,16 @@ export const routes: Routes = [
     loadComponent: () => import("./pages/survey-detail/survey-detail.page").then(m => m.SurveyDetailPage),
   },
   {
+    path: "survey/:id/vote",
+    canActivate: [authGuard],
+    loadComponent: () => import("./pages/survey-vote/survey-vote.page").then(m => m.SurveyVotePage),
+  },
+  {
+    path: "survey/:id/join",
+    canActivate: [authGuard],
+    loadComponent: () => import("./pages/survey-join/survey-join.page").then(m => m.SurveyJoinPage),
+  },
+  {
     path: "",
     redirectTo: "surveys",
     pathMatch: "full",

@@ -26,20 +26,50 @@
         </ion-card-content>
       </ion-card>
 
-      <div class="actions">
+      <!-- Admin actions -->
+      @if (isAdmin) {
+        <div class="actions">
+          @if (s.status === "draft") {
+            <ion-button expand="block" color="success" (click)="activate()">
+              <ion-icon name="play-outline" slot="start"></ion-icon>
+              {{ "survey.activate" | translate }}
+            </ion-button>
+          }
+          @if (s.status === "active") {
+            <ion-button expand="block" color="danger" (click)="closeSurvey()">
+              <ion-icon name="close-outline" slot="start"></ion-icon>
+              {{ "survey.close-survey" | translate }}
+            </ion-button>
+          }
+        </div>
+
+        <!-- Seed statements for draft surveys -->
         @if (s.status === "draft") {
-          <ion-button expand="block" color="success" (click)="activate()">
-            <ion-icon name="play-outline" slot="start"></ion-icon>
-            {{ "survey.activate" | translate }}
-          </ion-button>
+          <app-seed-statements
+            [surveyId]="s.id"
+            [charMin]="s.statementCharMin"
+            [charMax]="s.statementCharMax"
+          ></app-seed-statements>
         }
-        @if (s.status === "active") {
-          <ion-button expand="block" color="danger" (click)="closeSurvey()">
-            <ion-icon name="close-outline" slot="start"></ion-icon>
-            {{ "survey.close-survey" | translate }}
+      }
+
+      <!-- Join button for non-participants -->
+      @if (!isParticipantOrAdmin && s.status === "active") {
+        <div class="actions">
+          <ion-button expand="block" [routerLink]="'/survey/' + s.id + '/join'">
+            {{ "survey.join" | translate }}
           </ion-button>
-        }
-      </div>
+        </div>
+      }
+
+      <!-- Participant actions -->
+      @if (isParticipantOrAdmin && s.status === "active") {
+        <div class="actions">
+          <ion-button expand="block" [routerLink]="'/survey/' + s.id + '/vote'">
+            {{ "statement.start-voting" | translate }}
+          </ion-button>
+        </div>
+      }
     </div>
   }
 </ion-content>

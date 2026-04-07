@@ -54,6 +54,18 @@ func main() {
 		r.Post("/api/v1/survey", handler.ErrorHandler(h.CreateSurvey()))
 		r.Get("/api/v1/survey/{id}", handler.ErrorHandler(h.GetSurvey()))
 		r.Patch("/api/v1/survey/{id}", handler.ErrorHandler(h.UpdateSurvey()))
+		r.Post("/api/v1/survey/{id}/join", handler.ErrorHandler(h.JoinSurvey()))
+		r.Get("/api/v1/survey/{id}/participant/me", handler.ErrorHandler(h.GetMyParticipation()))
+
+		// Statement routes
+		r.Get("/api/v1/survey/{id}/statement", handler.ErrorHandler(h.ListStatements()))
+		r.Post("/api/v1/survey/{id}/statement", handler.ErrorHandler(h.SubmitStatement()))
+		r.Post("/api/v1/survey/{id}/statement/seed", handler.ErrorHandler(h.AddSeedStatement()))
+		r.Get("/api/v1/survey/{id}/statement/next", handler.ErrorHandler(h.GetNextStatement()))
+
+		// Response routes
+		r.Post("/api/v1/statement/{id}/response", handler.ErrorHandler(h.SubmitResponse()))
+		r.Get("/api/v1/survey/{id}/progress", handler.ErrorHandler(h.GetVoteProgress()))
 	})
 
 	log.Println("server listening on :8080")

@@ -41,7 +41,7 @@ export class SurveyCreatePage {
         title: this.title.trim(),
         description: this.description.trim() || undefined,
       });
-      this.router.navigateByUrl(`/survey/${survey.id}`);
+      this.router.navigateByUrl(`/survey/${survey.id}`, { replaceUrl: true });
     } catch {
       this.error.set(true);
     }

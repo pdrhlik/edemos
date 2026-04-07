@@ -1,0 +1,32 @@
+<div class="seed-section">
+  <h3>{{ "statement.seed-statements" | translate }}</h3>
+
+  <div class="add-form">
+    <ion-input
+      type="text"
+      labelPlacement="stacked"
+      fill="outline"
+      [(ngModel)]="newText"
+      name="newText"
+      [label]="'statement.add-seed' | translate"
+      [maxlength]="charMax()"
+    ></ion-input>
+    <ion-note class="char-counter" [color]="isValid ? 'medium' : 'danger'">
+      {{ charCount }} / {{ charMax() }}
+    </ion-note>
+    <ion-button expand="block" [disabled]="!isValid" (click)="addStatement()">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      {{ "statement.add-seed" | translate }}
+    </ion-button>
+  </div>
+
+  @if (statements().length > 0) {
+    <ion-list>
+      @for (st of statements(); track st.id) {
+        <ion-item>
+          <ion-label class="ion-text-wrap">{{ st.text }}</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  }
+</div>

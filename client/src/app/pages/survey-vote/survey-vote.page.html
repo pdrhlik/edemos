@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/survey/' + surveyId"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ progress().voted }} / {{ progress().total }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="vote-container">
+    <ion-progress-bar [value]="progressFraction"></ion-progress-bar>
+
+    @if (allDone()) {
+      <div class="done-state">
+        <ion-text color="success">
+          <h2>{{ "statement.all-done" | translate }}</h2>
+        </ion-text>
+        <ion-button [routerLink]="'/survey/' + surveyId" expand="block" fill="outline">
+          {{ "common.back" | translate }}
+        </ion-button>
+      </div>
+    }
+
+    @if (currentStatement(); as st) {
+      <ion-card class="statement-card">
+        <ion-card-content>
+          <p class="statement-text">{{ st.text }}</p>
+        </ion-card-content>
+      </ion-card>
+
+      <div class="important-toggle">
+        <ion-toggle [(ngModel)]="isImportant" labelPlacement="start">
+          {{ "statement.important" | translate }}
+        </ion-toggle>
+      </div>
+
+      <div class="vote-buttons">
+        <ion-button
+          expand="block"
+          color="success"
+          (click)="vote('agree')"
+          class="vote-btn"
+        >
+          <ion-icon name="thumbs-up-outline" slot="start"></ion-icon>
+          {{ "statement.agree" | translate }}
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          color="danger"
+          (click)="vote('disagree')"
+          class="vote-btn"
+        >
+          <ion-icon name="thumbs-down-outline" slot="start"></ion-icon>
+          {{ "statement.disagree" | translate }}
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          color="medium"
+          fill="outline"
+          (click)="vote('abstain')"
+          class="vote-btn"
+        >
+          <ion-icon name="remove-outline" slot="start"></ion-icon>
+          {{ "statement.abstain" | translate }}
+        </ion-button>
+      </div>
+    }
+  </div>
+</ion-content>
