@@ -5,6 +5,7 @@ export interface User {
   locale: string;
   role: string;
   emailVerified: boolean;
+  hasPassword: boolean;
   createdAt: string;
   updatedAt: string;
 }

@@ -8,7 +8,7 @@
     "edit": "Upravit",
     "close": "Zavřít",
     "back": "Zpět",
-    "error": "Došlo k chybě",
+    "error": "Něco se pokazilo. Zkuste to prosím znovu.",
     "confirm": "Potvrdit",
     "yes": "Ano",
     "no": "Ne",
@@ -25,11 +25,11 @@
     "name": "Jméno",
     "no-account": "Nemáte účet?",
     "have-account": "Již máte účet?",
-    "login-failed": "Nesprávný e-mail nebo heslo",
-    "register-failed": "Registrace se nezdařila",
-    "passwords-no-match": "Hesla se neshodují",
-    "login-success": "Přihlášení proběhlo úspěšně",
-    "logged-out": "Byli jste odhlášeni",
+    "login-failed": "Nesprávný e-mail nebo heslo.",
+    "register-failed": "Registrace se nezdařila. Zkuste to prosím znovu.",
+    "passwords-no-match": "Hesla se neshodují.",
+    "login-success": "Byli jste přihlášeni.",
+    "logged-out": "Byli jste odhlášeni.",
     "forgot-password": "Zapomněli jste heslo?",
     "forgot-password-title": "Zapomenuté heslo",
     "forgot-password-info": "Zadejte svůj e-mail a pošleme vám odkaz pro obnovení hesla.",
@@ -37,23 +37,23 @@
     "send-reset-link": "Odeslat odkaz",
     "reset-password": "Obnovit heslo",
     "new-password": "Nové heslo",
-    "password-reset-success": "Heslo bylo obnoveno. Nyní se můžete přihlásit.",
+    "password-reset-success": "Vaše heslo bylo obnoveno. Nyní se můžete přihlásit.",
     "verify-email-title": "Ověření e-mailu",
-    "verify-email-success": "E-mail byl úspěšně ověřen!",
-    "verify-email-failed": "Neplatný nebo prošlý ověřovací odkaz.",
+    "verify-email-success": "Váš e-mail byl úspěšně ověřen.",
+    "verify-email-failed": "Tento ověřovací odkaz je neplatný nebo vypršel.",
     "check-email": "Zkontrolujte e-mail",
     "check-email-info": "Poslali jsme vám ověřovací odkaz na e-mail. Zkontrolujte prosím svou schránku.",
     "check-spam": "Nenašli jste e-mail? Zkontrolujte složku se spamem.",
     "resend-verification": "Znovu odeslat ověřovací e-mail",
-    "verification-sent": "Ověřovací e-mail odeslán",
+    "verification-sent": "Ověřovací e-mail byl odeslán.",
     "back-to-login": "Zpět na přihlášení",
-    "email-required": "Nejdříve zadejte svůj e-mail",
+    "email-required": "Nejdříve zadejte svůj e-mail.",
     "magic-link": "Přihlásit se odkazem",
     "magic-link-info": "Zadejte svůj e-mail a pošleme vám odkaz pro přihlášení — bez hesla.",
     "magic-link-sent": "Pokud existuje účet s tímto e-mailem, byl odeslán přihlašovací odkaz. Zkontrolujte svou schránku.",
     "send-magic-link": "Odeslat přihlašovací odkaz",
-    "magic-link-success": "Přihlášení proběhlo úspěšně!",
-    "magic-link-failed": "Neplatný nebo prošlý přihlašovací odkaz.",
+    "magic-link-success": "Byli jste přihlášeni.",
+    "magic-link-failed": "Tento přihlašovací odkaz je neplatný nebo vypršel.",
     "or-use-password": "Přihlásit se heslem"
   },
   "survey": {
@@ -75,8 +75,8 @@
     "my-surveys": "Moje průzkumy",
     "discover": "Objevte",
     "no-surveys": "Zatím žádné průzkumy",
-    "activated": "Průzkum aktivován",
-    "closed-success": "Průzkum uzavřen",
+    "activated": "Průzkum byl aktivován.",
+    "closed-success": "Průzkum byl uzavřen.",
     "advanced-settings": "Pokročilá nastavení",
     "visibility": "Viditelnost",
     "visibility-public": "Veřejný",
@@ -97,7 +97,7 @@
     "statement-char-min": "Min. délka výroku",
     "statement-char-max": "Max. délka výroku",
     "closes-at": "Uzavírá se",
-    "settings-saved": "Nastavení uloženo"
+    "settings-saved": "Nastavení průzkumu byla uložena."
   },
   "statement": {
     "statements": "Výroky",
@@ -113,8 +113,8 @@
     "add-seed": "Přidat počáteční výrok",
     "char-count": "{{count}} / {{max}} znaků",
     "your-statement": "Váš výrok",
-    "submitted-for-moderation": "Výrok byl odeslán k moderaci",
-    "moderation-hint": "Váš výrok bude posouzen moderátorem, než se objeví v průzkumu"
+    "submitted-for-moderation": "Váš výrok byl odeslán k moderaci.",
+    "moderation-hint": "Váš výrok bude posouzen moderátorem, než se objeví v průzkumu."
   },
   "moderation": {
     "queue": "Fronta moderace",
@@ -122,8 +122,8 @@
     "reject": "Zamítnout",
     "pending": "Čekající",
     "no-pending": "Žádné výroky k posouzení",
-    "approved": "Výrok schválen",
-    "rejected": "Výrok zamítnut"
+    "approved": "Výrok byl schválen.",
+    "rejected": "Výrok byl zamítnut."
   },
   "results": {
     "results": "Výsledky",
@@ -148,16 +148,33 @@
     "role-admin": "Administrátor",
     "role-moderator": "Moderátor",
     "role-participant": "Účastník",
-    "role-updated": "Role aktualizována",
+    "role-updated": "Role účastníka byla aktualizována.",
     "remove-confirm-title": "Odebrat účastníka",
     "remove-confirm-message": "Opravdu chcete odebrat uživatele {{name}} z tohoto průzkumu?",
-    "removed": "Účastník odebrán"
+    "removed": "Účastník byl odebrán."
   },
   "settings": {
     "settings": "Nastavení",
+    "appearance": "Vzhled",
     "theme": "Motiv",
     "theme-auto": "Automatický (systém)",
     "theme-light": "Světlý",
     "theme-dark": "Tmavý"
+  },
+  "profile": {
+    "profile": "Profil",
+    "name": "Jméno",
+    "email": "E-mail",
+    "member-since": "Členem od",
+    "profile-updated": "Váš profil byl aktualizován.",
+    "password": "Heslo",
+    "current-password": "Aktuální heslo",
+    "new-password": "Nové heslo",
+    "confirm-new-password": "Potvrzení nového hesla",
+    "set-password": "Nastavit heslo",
+    "set-password-hint": "Nastavte si heslo jako alternativu k přihlášení odkazem.",
+    "change-password": "Změnit heslo",
+    "password-changed": "Vaše heslo bylo změněno.",
+    "forgot-password": "Zapomněli jste heslo?"
   }
 }

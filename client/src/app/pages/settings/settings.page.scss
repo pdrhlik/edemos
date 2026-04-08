@@ -2,3 +2,42 @@
   max-width: 600px;
   margin: 0 auto;
 }
+
+ion-list-header {
+  margin-top: 1.5rem;
+
+  ion-icon {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    vertical-align: middle;
+  }
+}
+
+ion-button {
+  margin-top: 0.75rem;
+}
+
+.readonly-item {
+  --background: var(--ion-color-light);
+  opacity: 0.8;
+}
+
+.password-hint {
+  display: block;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.forgot-link {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+
+  a {
+    color: var(--ion-color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+  }
+}

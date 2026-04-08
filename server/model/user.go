@@ -29,9 +29,11 @@ func (u User) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Alias
 		EmailVerified bool `json:"emailVerified"`
+		HasPassword   bool `json:"hasPassword"`
 	}{
 		Alias:         Alias(u),
 		EmailVerified: u.EmailVerified(),
+		HasPassword:   u.PasswordHash != "",
 	})
 }
 

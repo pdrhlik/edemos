@@ -91,6 +91,16 @@ export class AuthService {
     return res;
   }
 
+  async updateProfile(data: { name?: string; locale?: string }) {
+    const user = await firstValueFrom(this.api.patch<User>("/auth/me", data));
+    this._currentUser.set(user);
+    return user;
+  }
+
+  async changePassword(currentPassword: string, newPassword: string) {
+    await firstValueFrom(this.api.post("/auth/change-password", { currentPassword, newPassword }));
+  }
+
   private async setSession(res: AuthResponse) {
     this._token.set(res.token);
     this._currentUser.set(res.user);

@@ -76,6 +76,8 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.Auth(cfg.JWTSecret, s))
 		r.Get("/api/v1/auth/me", handler.ErrorHandler(h.Me()))
+		r.Patch("/api/v1/auth/me", handler.ErrorHandler(h.UpdateProfile()))
+		r.Post("/api/v1/auth/change-password", handler.ErrorHandler(h.ChangePassword()))
 		r.Post("/api/v1/auth/resend-verification", handler.ErrorHandler(h.ResendVerification()))
 
 		// Survey routes
