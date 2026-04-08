@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/pdrhlik/edemos/server/config"
+	"github.com/pdrhlik/edemos/server/notify"
 	"github.com/pdrhlik/edemos/server/store"
 )
 
@@ -13,6 +14,7 @@ type AppHandlerFunc func(http.ResponseWriter, *http.Request) error
 type Handler struct {
 	Store  *store.Store
 	Config config.Config
+	Notify *notify.Service
 }
 
 func parseJSON(r *http.Request, dest interface{}) error {

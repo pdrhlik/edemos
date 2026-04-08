@@ -1,6 +1,6 @@
 import { Component, inject, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import {
   IonButton,
   IonContent,
@@ -10,12 +10,12 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/angular/standalone";
-import { TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { TranslatePipe } from "@ngx-translate/core";
 import { AuthService } from "../../services/auth.service";
 import { ToastService } from "../../services/toast.service";
 
 @Component({
-  selector: "app-register",
+  selector: "app-forgot-password",
   standalone: true,
   imports: [
     FormsModule,
@@ -29,33 +29,25 @@ import { ToastService } from "../../services/toast.service";
     IonButton,
     IonSpinner,
   ],
-  templateUrl: "./register.page.html",
-  styleUrls: ["./register.page.scss"],
+  templateUrl: "./forgot-password.page.html",
+  styleUrls: ["./forgot-password.page.scss"],
 })
-export class RegisterPage {
+export class ForgotPasswordPage {
   private auth = inject(AuthService);
-  private router = inject(Router);
-  private translate = inject(TranslateService);
   private toast = inject(ToastService);
 
-  name = "";
   email = "";
-  password = "";
-  confirmPassword = "";
   submitting = signal(false);
+  sent = signal(false);
 
   async onSubmit() {
-    if (this.password !== this.confirmPassword) {
-      this.toast.error("auth.passwords-no-match");
-      return;
-    }
-
+    if (!this.email) return;
     this.submitting.set(true);
     try {
-      await this.auth.register(this.email, this.password, this.name, this.translate.currentLang);
-      this.router.navigateByUrl("/registration-success", { replaceUrl: true });
-    } catch {
-      this.toast.error("auth.register-failed");
+      await this.auth.forgotPassword(this.email);
+      this.sent.set(true);
+    } catch (e) {
+      this.toast.apiError(e);
     } finally {
       this.submitting.set(false);
     }

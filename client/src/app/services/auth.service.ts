@@ -19,6 +19,7 @@ export class AuthService {
   readonly token = this._token.asReadonly();
   readonly currentUser = this._currentUser.asReadonly();
   readonly isAuthenticated = computed(() => this._token() !== null);
+  readonly isVerified = computed(() => this._currentUser()?.emailVerified === true);
 
   async init() {
     const token = await this.storage.get("token");
@@ -58,6 +59,24 @@ export class AuthService {
 
   getToken(): string | null {
     return this._token();
+  }
+
+  async verifyEmail(token: string) {
+    const res = await firstValueFrom(this.api.post<AuthResponse>("/auth/verify-email", { token }));
+    await this.setSession(res);
+    return res;
+  }
+
+  async forgotPassword(email: string) {
+    await firstValueFrom(this.api.post("/auth/forgot-password", { email }));
+  }
+
+  async resetPassword(token: string, password: string) {
+    await firstValueFrom(this.api.post("/auth/reset-password", { token, password }));
+  }
+
+  async resendVerification() {
+    await firstValueFrom(this.api.post("/auth/resend-verification", {}));
   }
 
   private async setSession(res: AuthResponse) {

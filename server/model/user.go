@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type User struct {
 	ID                uint       `db:"id,selectonly" json:"id"`
@@ -14,6 +17,22 @@ type User struct {
 	NotificationPrefs *string    `db:"notification_prefs" json:"-"`
 	CreatedAt         time.Time  `db:"created_at,selectonly" json:"createdAt"`
 	UpdatedAt         time.Time  `db:"updated_at,selectonly" json:"updatedAt"`
+}
+
+func (u User) EmailVerified() bool {
+	return u.EmailVerifiedAt != nil
+}
+
+// MarshalJSON includes the computed emailVerified field.
+func (u User) MarshalJSON() ([]byte, error) {
+	type Alias User
+	return json.Marshal(&struct {
+		Alias
+		EmailVerified bool `json:"emailVerified"`
+	}{
+		Alias:         Alias(u),
+		EmailVerified: u.EmailVerified(),
+	})
 }
 
 type RegisterRequest struct {

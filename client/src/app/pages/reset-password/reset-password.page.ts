@@ -1,6 +1,6 @@
 import { Component, inject, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import {
   IonButton,
   IonContent,
@@ -10,12 +10,12 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/angular/standalone";
-import { TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { TranslatePipe } from "@ngx-translate/core";
 import { AuthService } from "../../services/auth.service";
 import { ToastService } from "../../services/toast.service";
 
 @Component({
-  selector: "app-register",
+  selector: "app-reset-password",
   standalone: true,
   imports: [
     FormsModule,
@@ -29,33 +29,36 @@ import { ToastService } from "../../services/toast.service";
     IonButton,
     IonSpinner,
   ],
-  templateUrl: "./register.page.html",
-  styleUrls: ["./register.page.scss"],
+  templateUrl: "./reset-password.page.html",
+  styleUrls: ["./reset-password.page.scss"],
 })
-export class RegisterPage {
-  private auth = inject(AuthService);
+export class ResetPasswordPage {
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private translate = inject(TranslateService);
+  private auth = inject(AuthService);
   private toast = inject(ToastService);
 
-  name = "";
-  email = "";
   password = "";
   confirmPassword = "";
   submitting = signal(false);
 
   async onSubmit() {
+    if (!this.password || !this.confirmPassword) return;
     if (this.password !== this.confirmPassword) {
       this.toast.error("auth.passwords-no-match");
       return;
     }
 
+    const token = this.route.snapshot.paramMap.get("token");
+    if (!token) return;
+
     this.submitting.set(true);
     try {
-      await this.auth.register(this.email, this.password, this.name, this.translate.currentLang);
-      this.router.navigateByUrl("/registration-success", { replaceUrl: true });
+      await this.auth.resetPassword(token, this.password);
+      this.toast.success("auth.password-reset-success");
+      this.router.navigateByUrl("/login", { replaceUrl: true });
     } catch {
-      this.toast.error("auth.register-failed");
+      this.toast.error("auth.verify-email-failed");
     } finally {
       this.submitting.set(false);
     }

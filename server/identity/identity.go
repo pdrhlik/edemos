@@ -7,8 +7,9 @@ type ctxKey int
 const CtxUserKey ctxKey = 1
 
 type User struct {
-	ID   uint
-	Role string
+	ID            uint
+	Role          string
+	EmailVerified bool
 }
 
 func ContextWithUser(ctx context.Context, user *User) context.Context {

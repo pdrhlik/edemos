@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ "auth.check-email" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="success-container">
+    <div class="icon-wrapper">
+      <ion-icon name="mail-outline"></ion-icon>
+    </div>
+
+    <h1>{{ "auth.check-email" | translate }}</h1>
+
+    <p class="info-text">{{ "auth.check-email-info" | translate }}</p>
+
+    @if (email) {
+    <p class="email-display">{{ email }}</p>
+    }
+
+    <p class="hint-text">{{ "auth.check-spam" | translate }}</p>
+
+    <ion-button
+      expand="block"
+      fill="outline"
+      (click)="resendVerification()"
+      [disabled]="resending() || cooldown() > 0"
+    >
+      @if (resending()) {
+      <ion-spinner name="crescent"></ion-spinner>
+      } @else if (cooldown() > 0) { {{ "auth.resend-verification" | translate }} ({{ cooldown() }}s)
+      } @else { {{ "auth.resend-verification" | translate }} }
+    </ion-button>
+
+    <p class="login-link">
+      <a routerLink="/login">{{ "auth.back-to-login" | translate }}</a>
+    </p>
+  </div>
+</ion-content>

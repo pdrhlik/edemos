@@ -1,0 +1,14 @@
+{
+  "email.from": "eDemOS",
+  "email.sent": "Odesláno z",
+  "email.verification.title": "Ověření e-mailu — eDemOS",
+  "email.verification.heading": "Vítejte v eDemOS!",
+  "email.verification.info": "Váš účet je téměř připraven. Ověřte prosím svou e-mailovou adresu kliknutím na tlačítko níže:",
+  "email.verification.button": "OVĚŘIT E-MAIL",
+  "email.verification.info2": "Pokud jste si účet nezakládali, můžete tento e-mail ignorovat.",
+  "email.passwordReset.title": "Obnovení hesla — eDemOS",
+  "email.passwordReset.heading": "Žádost o obnovení hesla",
+  "email.passwordReset.info": "Kliknutím na tlačítko níže nastavíte nové heslo ke svému účtu eDemOS:",
+  "email.passwordReset.button": "NASTAVIT NOVÉ HESLO",
+  "email.passwordReset.info2": "Pokud jste o obnovení hesla nežádali, můžete tento e-mail ignorovat."
+}

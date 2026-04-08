@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/pdrhlik/edemos/server/config"
 	"github.com/pdrhlik/edemos/server/handler"
 	"github.com/pdrhlik/edemos/server/middleware"
+	"github.com/pdrhlik/edemos/server/notify"
 	"github.com/pdrhlik/edemos/server/store"
 )
 
@@ -22,9 +24,30 @@ func main() {
 	}
 	defer s.DB.Close()
 
+	notifyService := notify.NewService(s.DB)
+
+	// Start background email sender if SMTP is configured
+	if notify.SMTPConfigured(cfg.SMTPHost) {
+		port := notify.ParseSMTPPort(cfg.SMTPPort)
+		dialer := notify.NewDialer(cfg.SMTPHost, port, cfg.SMTPUser, cfg.SMTPPassword)
+		sender := notify.NewGomailSender(dialer, cfg.SMTPFrom, "eDemOS")
+
+		go func() {
+			for {
+				err := notifyService.SendEmails(context.Background(), sender)
+				log.Printf("email sender stopped: %v, restarting...", err)
+			}
+		}()
+		log.Println("email sender started")
+	} else {
+		log.Println("SMTP not configured, emails will be auto-verified")
+		notifyService = nil
+	}
+
 	h := &handler.Handler{
 		Store:  s,
 		Config: cfg,
+		Notify: notifyService,
 	}
 
 	r := chi.NewRouter()
@@ -43,11 +66,15 @@ func main() {
 	// Public auth routes
 	r.Post("/api/v1/auth/register", handler.ErrorHandler(h.Register()))
 	r.Post("/api/v1/auth/login", handler.ErrorHandler(h.Login()))
+	r.Post("/api/v1/auth/verify-email", handler.ErrorHandler(h.VerifyEmail()))
+	r.Post("/api/v1/auth/forgot-password", handler.ErrorHandler(h.ForgotPassword()))
+	r.Post("/api/v1/auth/reset-password", handler.ErrorHandler(h.ResetPassword()))
 
 	// Protected routes
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.Auth(cfg.JWTSecret, s))
 		r.Get("/api/v1/auth/me", handler.ErrorHandler(h.Me()))
+		r.Post("/api/v1/auth/resend-verification", handler.ErrorHandler(h.ResendVerification()))
 
 		// Survey routes
 		r.Get("/api/v1/survey", handler.ErrorHandler(h.ListSurveys()))

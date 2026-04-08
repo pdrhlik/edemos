@@ -32,10 +32,24 @@ func Auth(secret string, s *store.Store) func(http.Handler) http.Handler {
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), identity.CtxUserKey, &identity.User{
-				ID:   u.ID,
-				Role: u.Role,
-			})
+			ident := &identity.User{
+				ID:            u.ID,
+				Role:          u.Role,
+				EmailVerified: u.EmailVerifiedAt != nil,
+			}
+			ctx := context.WithValue(r.Context(), identity.CtxUserKey, ident)
+
+			// Block unverified users from all routes except /auth/me and /auth/resend-verification
+			if !ident.EmailVerified {
+				path := r.URL.Path
+				if path != "/api/v1/auth/me" && path != "/api/v1/auth/resend-verification" {
+					w.Header().Set("Content-Type", "application/json")
+					w.WriteHeader(http.StatusForbidden)
+					w.Write([]byte(`{"error":"email not verified"}`))
+					return
+				}
+			}
+
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

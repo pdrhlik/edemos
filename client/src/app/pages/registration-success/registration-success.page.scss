@@ -1,0 +1,55 @@
+.success-container {
+  max-width: 440px;
+  margin: 0 auto;
+  padding-top: 8vh;
+  text-align: center;
+}
+
+.icon-wrapper {
+  margin-bottom: 1.5rem;
+
+  ion-icon {
+    font-size: 4rem;
+    color: var(--ion-color-primary);
+  }
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.info-text {
+  font-size: 1rem;
+  color: var(--ion-color-medium-shade);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.email-display {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ion-color-primary-contrast);
+  background: var(--ion-color-primary);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.hint-text {
+  font-size: 0.875rem;
+  color: var(--ion-color-medium);
+  margin-bottom: 1.5rem;
+}
+
+.login-link {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+
+  a {
+    color: var(--ion-color-primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+}

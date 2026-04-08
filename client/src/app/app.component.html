@@ -1,5 +1,5 @@
 <ion-app>
-  @if (auth.isAuthenticated()) {
+  @if (auth.isAuthenticated() && auth.isVerified()) {
     <ion-split-pane contentId="main-content" when="lg">
       <ion-menu contentId="main-content" type="overlay">
         <ion-header>
