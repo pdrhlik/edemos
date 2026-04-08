@@ -176,5 +176,33 @@
     "change-password": "Change password",
     "password-changed": "Your password has been changed.",
     "forgot-password": "Forgot your password?"
+  },
+  "intake": {
+    "intake-form": "Intake form",
+    "add-field": "Add field",
+    "remove-field": "Remove field",
+    "field-id": "Field ID",
+    "field-id-hint": "Unique identifier (e.g. age_group)",
+    "field-type": "Field type",
+    "type-text": "Text input",
+    "type-select": "Dropdown",
+    "type-radio": "Radio buttons",
+    "type-checkbox": "Checkboxes",
+    "required": "Required",
+    "label-en": "Label (English)",
+    "label-cs": "Label (Czech)",
+    "placeholder-en": "Placeholder (English)",
+    "placeholder-cs": "Placeholder (Czech)",
+    "options": "Options",
+    "add-option": "Add option",
+    "option-value": "Value",
+    "option-label-en": "Label (English)",
+    "option-label-cs": "Label (Czech)",
+    "condition": "Conditional logic",
+    "condition-field": "Show when field",
+    "condition-value": "equals value",
+    "preview": "Preview",
+    "builder": "Builder",
+    "no-fields": "No intake fields configured. Participants will join without a form."
   }
 }

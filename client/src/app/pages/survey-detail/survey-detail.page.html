@@ -172,6 +172,12 @@
           </ion-item>
         </ion-list>
 
+        <h3 class="ion-padding-start ion-padding-top">{{ "intake.intake-form" | translate }}</h3>
+        <app-intake-config-builder
+          [config]="editIntakeConfig()"
+          (configChange)="editIntakeConfig.set($event)"
+        ></app-intake-config-builder>
+
         <ion-button expand="block" (click)="saveSettings()" [disabled]="savingSettings()">
           @if (savingSettings()) {
           <ion-spinner name="crescent"></ion-spinner>

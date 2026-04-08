@@ -1,0 +1,232 @@
+<div class="builder-header">
+  <ion-button size="small" fill="outline" (click)="addField()">
+    <ion-icon name="add-outline" slot="start"></ion-icon>
+    {{ "intake.add-field" | translate }}
+  </ion-button>
+  <ion-button size="small" fill="outline" (click)="togglePreview()">
+    @if (previewMode()) {
+      <ion-icon name="create-outline" slot="start"></ion-icon>
+      {{ "intake.builder" | translate }}
+    } @else {
+      <ion-icon name="eye-outline" slot="start"></ion-icon>
+      {{ "intake.preview" | translate }}
+    }
+  </ion-button>
+</div>
+
+@if (previewMode()) {
+  @if (fields().length > 0) {
+    <app-intake-form-renderer
+      [fields]="fields()"
+      [formData]="previewFormData()"
+      (formDataChange)="previewFormData.set($event)"
+    ></app-intake-form-renderer>
+  } @else {
+    <ion-note>{{ "intake.no-fields" | translate }}</ion-note>
+  }
+} @else {
+  @if (fields().length === 0) {
+    <ion-note>{{ "intake.no-fields" | translate }}</ion-note>
+  }
+
+  @for (field of fields(); track $index; let i = $index) {
+    <ion-card>
+      <ion-card-header>
+        <div class="card-actions">
+          <ion-card-title>{{ field.id || ("intake.add-field" | translate) }}</ion-card-title>
+          <div class="action-buttons">
+            <ion-button size="small" fill="clear" [disabled]="i === 0" (click)="moveField(i, 'up')">
+              <ion-icon name="arrow-up-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button
+              size="small"
+              fill="clear"
+              [disabled]="i === fields().length - 1"
+              (click)="moveField(i, 'down')"
+            >
+              <ion-icon name="arrow-down-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button size="small" fill="clear" color="danger" (click)="removeField(i)">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list>
+          <!-- Field ID and type -->
+          <ion-item>
+            <ion-input
+              labelPlacement="stacked"
+              [label]="'intake.field-id' | translate"
+              [(ngModel)]="field.id"
+              [name]="'id_' + i"
+              [placeholder]="'intake.field-id-hint' | translate"
+              (ionChange)="updateField(i)"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              labelPlacement="stacked"
+              [label]="'intake.field-type' | translate"
+              [value]="field.type"
+              (ionChange)="onTypeChange(i, $event.detail.value)"
+              [name]="'type_' + i"
+              interface="popover"
+            >
+              <ion-select-option value="text">{{
+                "intake.type-text" | translate
+              }}</ion-select-option>
+              <ion-select-option value="select">{{
+                "intake.type-select" | translate
+              }}</ion-select-option>
+              <ion-select-option value="radio">{{
+                "intake.type-radio" | translate
+              }}</ion-select-option>
+              <ion-select-option value="checkbox">{{
+                "intake.type-checkbox" | translate
+              }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Required toggle -->
+          <ion-item>
+            <ion-toggle
+              [(ngModel)]="field.required"
+              [name]="'required_' + i"
+              (ionChange)="updateField(i)"
+            >
+              {{ "intake.required" | translate }}
+            </ion-toggle>
+          </ion-item>
+
+          <!-- Labels -->
+          <ion-item>
+            <ion-input
+              labelPlacement="stacked"
+              [label]="'intake.label-en' | translate"
+              [(ngModel)]="field.label.en"
+              [name]="'label_en_' + i"
+              (ionChange)="updateField(i)"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              labelPlacement="stacked"
+              [label]="'intake.label-cs' | translate"
+              [(ngModel)]="field.label.cs"
+              [name]="'label_cs_' + i"
+              (ionChange)="updateField(i)"
+            ></ion-input>
+          </ion-item>
+
+          <!-- Placeholder (text only) -->
+          @if (field.type === "text") {
+            <ion-item>
+              <ion-input
+                labelPlacement="stacked"
+                [label]="'intake.placeholder-en' | translate"
+                [(ngModel)]="field.placeholder!.en"
+                [name]="'ph_en_' + i"
+                (ionChange)="updateField(i)"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input
+                labelPlacement="stacked"
+                [label]="'intake.placeholder-cs' | translate"
+                [(ngModel)]="field.placeholder!.cs"
+                [name]="'ph_cs_' + i"
+                (ionChange)="updateField(i)"
+              ></ion-input>
+            </ion-item>
+          }
+
+          <!-- Options (select/radio/checkbox) -->
+          @if (hasOptions(field.type) && field.options) {
+            <ion-item lines="none">
+              <ion-label>{{ "intake.options" | translate }}</ion-label>
+            </ion-item>
+            @for (option of field.options; track $index; let j = $index) {
+              <div class="option-row">
+                <ion-item>
+                  <ion-input
+                    labelPlacement="stacked"
+                    [label]="'intake.option-value' | translate"
+                    [(ngModel)]="option.value"
+                    [name]="'opt_val_' + i + '_' + j"
+                    (ionChange)="updateField(i)"
+                  ></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input
+                    labelPlacement="stacked"
+                    [label]="'intake.option-label-en' | translate"
+                    [(ngModel)]="option.label.en"
+                    [name]="'opt_en_' + i + '_' + j"
+                    (ionChange)="updateField(i)"
+                  ></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input
+                    labelPlacement="stacked"
+                    [label]="'intake.option-label-cs' | translate"
+                    [(ngModel)]="option.label.cs"
+                    [name]="'opt_cs_' + i + '_' + j"
+                    (ionChange)="updateField(i)"
+                  ></ion-input>
+                </ion-item>
+                <ion-button size="small" fill="clear" color="danger" (click)="removeOption(i, j)">
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+            }
+            <ion-button size="small" fill="outline" (click)="addOption(i)">
+              <ion-icon name="add-outline" slot="start"></ion-icon>
+              {{ "intake.add-option" | translate }}
+            </ion-button>
+          }
+
+          <!-- Conditional logic -->
+          @if (getOtherFields(i).length > 0) {
+            <ion-item>
+              <ion-toggle
+                [checked]="!!field.condition"
+                (ionChange)="toggleCondition(i)"
+                [name]="'cond_toggle_' + i"
+              >
+                {{ "intake.condition" | translate }}
+              </ion-toggle>
+            </ion-item>
+            @if (field.condition) {
+              <ion-item>
+                <ion-select
+                  labelPlacement="stacked"
+                  [label]="'intake.condition-field' | translate"
+                  [(ngModel)]="field.condition.fieldId"
+                  [name]="'cond_field_' + i"
+                  interface="popover"
+                  (ionChange)="updateField(i)"
+                >
+                  @for (other of getOtherFields(i); track other.id) {
+                    <ion-select-option [value]="other.id">{{ other.id }}</ion-select-option>
+                  }
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-input
+                  labelPlacement="stacked"
+                  [label]="'intake.condition-value' | translate"
+                  [(ngModel)]="field.condition.value"
+                  [name]="'cond_val_' + i"
+                  (ionChange)="updateField(i)"
+                ></ion-input>
+              </ion-item>
+            }
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  }
+}

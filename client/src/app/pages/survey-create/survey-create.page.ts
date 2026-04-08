@@ -21,6 +21,8 @@ import {
   IonToolbar,
 } from "@ionic/angular/standalone";
 import { TranslatePipe } from "@ngx-translate/core";
+import { IntakeConfigBuilderComponent } from "../../components/intake-config-builder/intake-config-builder.component";
+import { IntakeConfig } from "../../models/intake-config.model";
 import { SurveyService } from "../../services/survey.service";
 import { ToastService } from "../../services/toast.service";
 
@@ -47,6 +49,7 @@ import { ToastService } from "../../services/toast.service";
     IonList,
     IonSelect,
     IonSelectOption,
+    IntakeConfigBuilderComponent,
   ],
   templateUrl: "./survey-create.page.html",
   styleUrls: ["./survey-create.page.scss"],
@@ -65,6 +68,7 @@ export class SurveyCreatePage {
   statementCharMin = 20;
   statementCharMax = 150;
   closesAt = "";
+  intakeConfig = signal<IntakeConfig | null>(null);
   submitting = signal(false);
 
   async onSubmit() {
@@ -82,6 +86,7 @@ export class SurveyCreatePage {
         statementCharMin: this.statementCharMin,
         statementCharMax: this.statementCharMax,
         closesAt: this.closesAt ? new Date(this.closesAt).toISOString() : undefined,
+        intakeConfig: this.intakeConfig()?.fields?.length ? this.intakeConfig()! : undefined,
       });
       this.router.navigateByUrl(`/survey/${survey.slug}`, { replaceUrl: true });
     } catch (e) {

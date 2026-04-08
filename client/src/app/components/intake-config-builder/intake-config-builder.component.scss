@@ -1,0 +1,32 @@
+.builder-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0;
+}
+
+.option-row {
+  padding-left: 1rem;
+  border-left: 3px solid var(--ion-color-light);
+  margin-bottom: 0.5rem;
+}
+
+ion-card {
+  margin-bottom: 1rem;
+}
+
+ion-note {
+  display: block;
+  text-align: center;
+  padding: 1rem;
+}

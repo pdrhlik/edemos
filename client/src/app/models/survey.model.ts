@@ -1,3 +1,5 @@
+import { IntakeConfig } from "./intake-config.model";
+
 export interface Survey {
   id: number;
   organizationId?: number;
@@ -12,7 +14,7 @@ export interface Survey {
   statementOrder: string;
   statementCharMin: number;
   statementCharMax: number;
-  intakeConfig?: any;
+  intakeConfig?: IntakeConfig;
   closesAt?: string;
   createdBy: number;
   createdAt: string;
@@ -40,7 +42,7 @@ export interface CreateSurveyRequest {
   statementOrder?: string;
   statementCharMin?: number;
   statementCharMax?: number;
-  intakeConfig?: any;
+  intakeConfig?: IntakeConfig;
   closesAt?: string;
 }
 
@@ -55,6 +57,6 @@ export interface UpdateSurveyRequest {
   statementOrder?: string;
   statementCharMin?: number;
   statementCharMax?: number;
-  intakeConfig?: any;
+  intakeConfig?: IntakeConfig;
   closesAt?: string;
 }

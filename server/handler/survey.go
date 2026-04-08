@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -20,7 +21,59 @@ var (
 	validInvitationModes   = map[string]bool{"none": true, "admin_only": true, "participants_can_invite": true}
 	validResultVisibility  = map[string]bool{"after_completion": true, "continuous": true, "after_close": true}
 	validStatementOrders   = map[string]bool{"random": true, "sequential": true, "least_voted": true}
+	validFieldTypes        = map[string]bool{"text": true, "select": true, "radio": true, "checkbox": true}
 )
+
+func validateIntakeConfig(raw json.RawMessage) error {
+	var config struct {
+		Fields []struct {
+			ID        string `json:"id"`
+			Type      string `json:"type"`
+			Options   []struct {
+				Value string `json:"value"`
+			} `json:"options"`
+			Condition *struct {
+				FieldID string `json:"fieldId"`
+			} `json:"condition"`
+		} `json:"fields"`
+	}
+	if err := json.Unmarshal(raw, &config); err != nil {
+		return fmt.Errorf("invalid intake config JSON")
+	}
+
+	ids := map[string]bool{}
+	for _, f := range config.Fields {
+		if f.ID == "" {
+			return fmt.Errorf("each intake field must have an ID")
+		}
+		if ids[f.ID] {
+			return fmt.Errorf("duplicate intake field ID: %s", f.ID)
+		}
+		ids[f.ID] = true
+
+		if !validFieldTypes[f.Type] {
+			return fmt.Errorf("invalid field type: %s", f.Type)
+		}
+
+		if f.Type == "select" || f.Type == "radio" || f.Type == "checkbox" {
+			if len(f.Options) == 0 {
+				return fmt.Errorf("field %s must have at least one option", f.ID)
+			}
+			for _, opt := range f.Options {
+				if opt.Value == "" {
+					return fmt.Errorf("field %s has an option with empty value", f.ID)
+				}
+			}
+		}
+
+		if f.Condition != nil && f.Condition.FieldID != "" {
+			if !ids[f.Condition.FieldID] {
+				return fmt.Errorf("field %s references unknown condition field: %s", f.ID, f.Condition.FieldID)
+			}
+		}
+	}
+	return nil
+}
 
 // isSurveyClosed returns true if the survey has a closesAt time that has passed.
 func isSurveyClosed(survey *model.Survey) bool {
@@ -126,6 +179,12 @@ func (h *Handler) CreateSurvey() AppHandlerFunc {
 			statementOrder = in.StatementOrder
 		}
 
+		if in.IntakeConfig != nil {
+			if err := validateIntakeConfig(*in.IntakeConfig); err != nil {
+				return writeError(w, http.StatusBadRequest, err.Error())
+			}
+		}
+
 		survey := &model.Survey{
 			Title:            in.Title,
 			Slug:             surveySlug,
@@ -138,7 +197,7 @@ func (h *Handler) CreateSurvey() AppHandlerFunc {
 			StatementOrder:   statementOrder,
 			StatementCharMin: charMin,
 			StatementCharMax: charMax,
-			IntakeConfig:     in.IntakeConfig,
+			IntakeConfig: in.IntakeConfig,
 			ClosesAt:         in.ClosesAt,
 			CreatedBy:        user.ID,
 		}
@@ -295,6 +354,9 @@ func (h *Handler) UpdateSurvey() AppHandlerFunc {
 			return writeError(w, http.StatusBadRequest, "statement_char_min must be less than or equal to statement_char_max")
 		}
 		if in.IntakeConfig != nil {
+			if err := validateIntakeConfig(*in.IntakeConfig); err != nil {
+				return writeError(w, http.StatusBadRequest, err.Error())
+			}
 			fields["intake_config"] = *in.IntakeConfig
 		}
 		if in.ClosesAt != nil {

@@ -28,6 +28,8 @@ import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 import { addIcons } from "ionicons";
 import { closeOutline, playOutline, shieldCheckmarkOutline } from "ionicons/icons";
 import { firstValueFrom } from "rxjs";
+import { IntakeConfigBuilderComponent } from "../../components/intake-config-builder/intake-config-builder.component";
+import { IntakeConfig } from "../../models/intake-config.model";
 import { ParticipantsComponent } from "../../components/participants/participants.component";
 import { SeedStatementsComponent } from "../../components/seed-statements/seed-statements.component";
 import { SubmitStatementComponent } from "../../components/submit-statement/submit-statement.component";
@@ -66,6 +68,7 @@ import { ToastService } from "../../services/toast.service";
     IonSelectOption,
     IonSpinner,
     DatePipe,
+    IntakeConfigBuilderComponent,
     ParticipantsComponent,
     SeedStatementsComponent,
     SubmitStatementComponent,
@@ -94,6 +97,7 @@ export class SurveyDetailPage {
   editStatementCharMin = signal(20);
   editStatementCharMax = signal(150);
   editClosesAt = signal("");
+  editIntakeConfig = signal<IntakeConfig | null>(null);
   savingSettings = signal(false);
 
   constructor() {
@@ -118,6 +122,7 @@ export class SurveyDetailPage {
     this.editStatementCharMin.set(survey.statementCharMin);
     this.editStatementCharMax.set(survey.statementCharMax);
     this.editClosesAt.set(survey.closesAt ?? "");
+    this.editIntakeConfig.set(survey.intakeConfig ?? null);
 
     // Check if current user is a participant
     try {
@@ -218,6 +223,9 @@ export class SurveyDetailPage {
         statementCharMin: this.editStatementCharMin(),
         statementCharMax: this.editStatementCharMax(),
         closesAt: this.editClosesAt() ? new Date(this.editClosesAt()).toISOString() : undefined,
+        intakeConfig: this.editIntakeConfig()?.fields?.length
+          ? this.editIntakeConfig()!
+          : undefined,
       });
       this.survey.set(updated);
       this.toast.success("survey.settings-saved");

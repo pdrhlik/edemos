@@ -176,5 +176,33 @@
     "change-password": "Změnit heslo",
     "password-changed": "Vaše heslo bylo změněno.",
     "forgot-password": "Zapomněli jste heslo?"
+  },
+  "intake": {
+    "intake-form": "Vstupní formulář",
+    "add-field": "Přidat pole",
+    "remove-field": "Odebrat pole",
+    "field-id": "ID pole",
+    "field-id-hint": "Unikátní identifikátor (např. vekova_skupina)",
+    "field-type": "Typ pole",
+    "type-text": "Textový vstup",
+    "type-select": "Rozbalovací seznam",
+    "type-radio": "Přepínače",
+    "type-checkbox": "Zaškrtávací políčka",
+    "required": "Povinné",
+    "label-en": "Popisek (anglicky)",
+    "label-cs": "Popisek (česky)",
+    "placeholder-en": "Zástupný text (anglicky)",
+    "placeholder-cs": "Zástupný text (česky)",
+    "options": "Možnosti",
+    "add-option": "Přidat možnost",
+    "option-value": "Hodnota",
+    "option-label-en": "Popisek (anglicky)",
+    "option-label-cs": "Popisek (česky)",
+    "condition": "Podmíněná logika",
+    "condition-field": "Zobrazit, když pole",
+    "condition-value": "se rovná hodnotě",
+    "preview": "Náhled",
+    "builder": "Editor",
+    "no-fields": "Nejsou nakonfigurovány žádné vstupní pole. Účastníci se připojí bez formuláře."
   }
 }

@@ -148,6 +148,17 @@
             </ion-item>
           </ion-list>
         </ion-accordion>
+        <ion-accordion value="intake">
+          <ion-item slot="header">
+            <ion-label>{{ "intake.intake-form" | translate }}</ion-label>
+          </ion-item>
+          <div slot="content" class="ion-padding">
+            <app-intake-config-builder
+              [config]="intakeConfig()"
+              (configChange)="intakeConfig.set($event)"
+            ></app-intake-config-builder>
+          </div>
+        </ion-accordion>
       </ion-accordion-group>
 
       <ion-button expand="block" type="submit" [disabled]="submitting()">

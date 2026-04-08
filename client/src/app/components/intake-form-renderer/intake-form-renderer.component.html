@@ -1,0 +1,74 @@
+@for (field of fields(); track field.id) {
+  @if (isFieldVisible(field)) {
+    @switch (field.type) {
+      @case ("text") {
+        <ion-item>
+          <ion-input
+            type="text"
+            labelPlacement="stacked"
+            fill="outline"
+            [label]="getLabel(field.label) + (field.required ? ' *' : '')"
+            [placeholder]="getPlaceholder(field)"
+            [value]="formData()[field.id] || ''"
+            (ionChange)="onFieldChange(field.id, $event.detail.value)"
+          ></ion-input>
+        </ion-item>
+      }
+      @case ("select") {
+        <ion-item>
+          <ion-select
+            labelPlacement="stacked"
+            fill="outline"
+            [label]="getLabel(field.label) + (field.required ? ' *' : '')"
+            [value]="formData()[field.id] || ''"
+            (ionChange)="onFieldChange(field.id, $event.detail.value)"
+            interface="popover"
+          >
+            @for (option of field.options; track option.value) {
+              <ion-select-option [value]="option.value">
+                {{ getOptionLabel(option) }}
+              </ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      }
+      @case ("radio") {
+        <div class="radio-field">
+          <ion-label class="field-label">
+            {{ getLabel(field.label) }}{{ field.required ? " *" : "" }}
+          </ion-label>
+          <ion-radio-group
+            [value]="formData()[field.id] || ''"
+            (ionChange)="onFieldChange(field.id, $event.detail.value)"
+          >
+            @for (option of field.options; track option.value) {
+              <ion-item>
+                <ion-radio [value]="option.value" labelPlacement="end">
+                  {{ getOptionLabel(option) }}
+                </ion-radio>
+              </ion-item>
+            }
+          </ion-radio-group>
+        </div>
+      }
+      @case ("checkbox") {
+        <div class="checkbox-field">
+          <ion-label class="field-label">
+            {{ getLabel(field.label) }}{{ field.required ? " *" : "" }}
+          </ion-label>
+          @for (option of field.options; track option.value) {
+            <ion-item>
+              <ion-checkbox
+                labelPlacement="end"
+                [checked]="isChecked(field.id, option.value)"
+                (ionChange)="toggleCheckbox(field.id, option.value)"
+              >
+                {{ getOptionLabel(option) }}
+              </ion-checkbox>
+            </ion-item>
+          }
+        </div>
+      }
+    }
+  }
+}
