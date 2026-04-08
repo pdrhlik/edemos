@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mibk/dali"
@@ -12,6 +13,19 @@ import (
 	"github.com/pdrhlik/edemos/server/model"
 	"github.com/pdrhlik/edemos/server/slug"
 )
+
+var (
+	validVisibilities      = map[string]bool{"public": true, "private": true, "unlisted": true}
+	validPrivacyModes      = map[string]bool{"anonymous": true, "public": true, "participant_choice": true}
+	validInvitationModes   = map[string]bool{"none": true, "admin_only": true, "participants_can_invite": true}
+	validResultVisibility  = map[string]bool{"after_completion": true, "continuous": true, "after_close": true}
+	validStatementOrders   = map[string]bool{"random": true, "sequential": true, "least_voted": true}
+)
+
+// isSurveyClosed returns true if the survey has a closesAt time that has passed.
+func isSurveyClosed(survey *model.Survey) bool {
+	return survey.ClosesAt != nil && survey.ClosesAt.Before(time.Now())
+}
 
 // getSurveyFromSlug resolves the survey from the {slug} URL param.
 func (h *Handler) getSurveyFromSlug(w http.ResponseWriter, r *http.Request) (*model.Survey, error) {
@@ -72,24 +86,43 @@ func (h *Handler) CreateSurvey() AppHandlerFunc {
 			charMax = *in.StatementCharMax
 		}
 
+		if charMin > charMax {
+			return writeError(w, http.StatusBadRequest, "statement_char_min must be less than or equal to statement_char_max")
+		}
+
 		visibility := "private"
 		if in.Visibility != "" {
+			if !validVisibilities[in.Visibility] {
+				return writeError(w, http.StatusBadRequest, "invalid visibility value")
+			}
 			visibility = in.Visibility
 		}
 		privacyMode := "anonymous"
 		if in.PrivacyMode != "" {
+			if !validPrivacyModes[in.PrivacyMode] {
+				return writeError(w, http.StatusBadRequest, "invalid privacy_mode value")
+			}
 			privacyMode = in.PrivacyMode
 		}
 		invitationMode := "none"
 		if in.InvitationMode != "" {
+			if !validInvitationModes[in.InvitationMode] {
+				return writeError(w, http.StatusBadRequest, "invalid invitation_mode value")
+			}
 			invitationMode = in.InvitationMode
 		}
 		resultVisibility := "after_completion"
 		if in.ResultVisibility != "" {
+			if !validResultVisibility[in.ResultVisibility] {
+				return writeError(w, http.StatusBadRequest, "invalid result_visibility value")
+			}
 			resultVisibility = in.ResultVisibility
 		}
 		statementOrder := "random"
 		if in.StatementOrder != "" {
+			if !validStatementOrders[in.StatementOrder] {
+				return writeError(w, http.StatusBadRequest, "invalid statement_order value")
+			}
 			statementOrder = in.StatementOrder
 		}
 
@@ -161,6 +194,19 @@ func (h *Handler) GetSurvey() AppHandlerFunc {
 		if survey == nil {
 			return nil // 404 already written
 		}
+
+		// Private surveys are only visible to participants
+		if survey.Visibility == "private" {
+			user := identity.GetUserFromContext(r.Context())
+			isParticipant, err := h.Store.IsParticipant(r.Context(), survey.ID, user.ID)
+			if err != nil {
+				return err
+			}
+			if !isParticipant {
+				return writeError(w, http.StatusNotFound, "survey not found")
+			}
+		}
+
 		return writeJSON(w, http.StatusOK, survey)
 	}
 }
@@ -201,18 +247,33 @@ func (h *Handler) UpdateSurvey() AppHandlerFunc {
 			fields["status"] = *in.Status
 		}
 		if in.Visibility != nil {
+			if !validVisibilities[*in.Visibility] {
+				return writeError(w, http.StatusBadRequest, "invalid visibility value")
+			}
 			fields["visibility"] = *in.Visibility
 		}
 		if in.PrivacyMode != nil {
+			if !validPrivacyModes[*in.PrivacyMode] {
+				return writeError(w, http.StatusBadRequest, "invalid privacy_mode value")
+			}
 			fields["privacy_mode"] = *in.PrivacyMode
 		}
 		if in.InvitationMode != nil {
+			if !validInvitationModes[*in.InvitationMode] {
+				return writeError(w, http.StatusBadRequest, "invalid invitation_mode value")
+			}
 			fields["invitation_mode"] = *in.InvitationMode
 		}
 		if in.ResultVisibility != nil {
+			if !validResultVisibility[*in.ResultVisibility] {
+				return writeError(w, http.StatusBadRequest, "invalid result_visibility value")
+			}
 			fields["result_visibility"] = *in.ResultVisibility
 		}
 		if in.StatementOrder != nil {
+			if !validStatementOrders[*in.StatementOrder] {
+				return writeError(w, http.StatusBadRequest, "invalid statement_order value")
+			}
 			fields["statement_order"] = *in.StatementOrder
 		}
 		if in.StatementCharMin != nil {
@@ -220,6 +281,18 @@ func (h *Handler) UpdateSurvey() AppHandlerFunc {
 		}
 		if in.StatementCharMax != nil {
 			fields["statement_char_max"] = *in.StatementCharMax
+		}
+		// Validate charMin <= charMax (consider both new values and existing survey values)
+		charMin := survey.StatementCharMin
+		if in.StatementCharMin != nil {
+			charMin = *in.StatementCharMin
+		}
+		charMax := survey.StatementCharMax
+		if in.StatementCharMax != nil {
+			charMax = *in.StatementCharMax
+		}
+		if charMin > charMax {
+			return writeError(w, http.StatusBadRequest, "statement_char_min must be less than or equal to statement_char_max")
 		}
 		if in.IntakeConfig != nil {
 			fields["intake_config"] = *in.IntakeConfig
@@ -281,6 +354,10 @@ func (h *Handler) JoinSurvey() AppHandlerFunc {
 
 		if survey.Status != "active" {
 			return writeError(w, http.StatusBadRequest, "survey is not active")
+		}
+
+		if isSurveyClosed(survey) {
+			return writeError(w, http.StatusForbidden, "survey has closed")
 		}
 
 		isParticipant, err := h.Store.IsParticipant(r.Context(), survey.ID, user.ID)

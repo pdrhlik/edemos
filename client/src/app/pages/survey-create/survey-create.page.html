@@ -29,6 +29,127 @@
         [rows]="3"
       ></ion-textarea>
 
+      <ion-accordion-group>
+        <ion-accordion value="advanced">
+          <ion-item slot="header">
+            <ion-label>{{ "survey.advanced-settings" | translate }}</ion-label>
+          </ion-item>
+          <ion-list slot="content">
+            <ion-item>
+              <ion-select
+                [label]="'survey.visibility' | translate"
+                labelPlacement="stacked"
+                [(ngModel)]="visibility"
+                name="visibility"
+                interface="popover"
+              >
+                <ion-select-option value="private"
+                  >{{ "survey.visibility-private" | translate }}</ion-select-option
+                >
+                <ion-select-option value="public"
+                  >{{ "survey.visibility-public" | translate }}</ion-select-option
+                >
+                <ion-select-option value="unlisted"
+                  >{{ "survey.visibility-unlisted" | translate }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-select
+                [label]="'survey.privacy-mode' | translate"
+                labelPlacement="stacked"
+                [(ngModel)]="privacyMode"
+                name="privacyMode"
+                interface="popover"
+              >
+                <ion-select-option value="anonymous"
+                  >{{ "survey.privacy-anonymous" | translate }}</ion-select-option
+                >
+                <ion-select-option value="public"
+                  >{{ "survey.privacy-public" | translate }}</ion-select-option
+                >
+                <ion-select-option value="participant_choice"
+                  >{{ "survey.privacy-participant-choice" | translate }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-select
+                [label]="'survey.result-visibility' | translate"
+                labelPlacement="stacked"
+                [(ngModel)]="resultVisibility"
+                name="resultVisibility"
+                interface="popover"
+              >
+                <ion-select-option value="after_completion"
+                  >{{ "survey.result-after-completion" | translate }}</ion-select-option
+                >
+                <ion-select-option value="continuous"
+                  >{{ "survey.result-continuous" | translate }}</ion-select-option
+                >
+                <ion-select-option value="after_close"
+                  >{{ "survey.result-after-close" | translate }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-select
+                [label]="'survey.statement-order' | translate"
+                labelPlacement="stacked"
+                [(ngModel)]="statementOrder"
+                name="statementOrder"
+                interface="popover"
+              >
+                <ion-select-option value="random"
+                  >{{ "survey.order-random" | translate }}</ion-select-option
+                >
+                <ion-select-option value="sequential"
+                  >{{ "survey.order-sequential" | translate }}</ion-select-option
+                >
+                <ion-select-option value="least_voted"
+                  >{{ "survey.order-least-voted" | translate }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                type="number"
+                labelPlacement="stacked"
+                [label]="'survey.statement-char-min' | translate"
+                [(ngModel)]="statementCharMin"
+                name="statementCharMin"
+                [min]="1"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                type="number"
+                labelPlacement="stacked"
+                [label]="'survey.statement-char-max' | translate"
+                [(ngModel)]="statementCharMax"
+                name="statementCharMax"
+                [min]="1"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                type="datetime-local"
+                labelPlacement="stacked"
+                [label]="'survey.closes-at' | translate"
+                [(ngModel)]="closesAt"
+                name="closesAt"
+              ></ion-input>
+            </ion-item>
+          </ion-list>
+        </ion-accordion>
+      </ion-accordion-group>
+
       <ion-button expand="block" type="submit" [disabled]="submitting()">
         @if (submitting()) {
         <ion-spinner name="crescent"></ion-spinner>

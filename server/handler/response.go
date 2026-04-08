@@ -22,6 +22,18 @@ func (h *Handler) SubmitResponse() AppHandlerFunc {
 			return writeError(w, http.StatusNotFound, "statement not found")
 		}
 
+		// Check if survey is past its closing time
+		survey, err := h.Store.GetSurvey(r.Context(), surveyID)
+		if err != nil {
+			return err
+		}
+		if survey == nil {
+			return writeError(w, http.StatusNotFound, "survey not found")
+		}
+		if isSurveyClosed(survey) {
+			return writeError(w, http.StatusForbidden, "survey has closed")
+		}
+
 		// Verify user is participant
 		isParticipant, err := h.Store.IsParticipant(r.Context(), surveyID, user.ID)
 		if err != nil {

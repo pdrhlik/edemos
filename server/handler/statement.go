@@ -101,6 +101,10 @@ func (h *Handler) SubmitStatement() AppHandlerFunc {
 			return writeError(w, http.StatusBadRequest, "survey is not active")
 		}
 
+		if isSurveyClosed(survey) {
+			return writeError(w, http.StatusForbidden, "survey has closed")
+		}
+
 		var in model.CreateStatementRequest
 		if err := parseJSON(r, &in); err != nil {
 			return writeError(w, http.StatusBadRequest, "invalid request body")
@@ -141,6 +145,10 @@ func (h *Handler) GetNextStatement() AppHandlerFunc {
 		}
 		if survey == nil {
 			return nil
+		}
+
+		if isSurveyClosed(survey) {
+			return writeError(w, http.StatusForbidden, "survey has closed")
 		}
 
 		user := identity.GetUserFromContext(r.Context())

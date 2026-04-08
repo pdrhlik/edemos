@@ -2,12 +2,19 @@ import { Component, inject, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import {
+  IonAccordion,
+  IonAccordionGroup,
   IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
   IonHeader,
   IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonSelect,
+  IonSelectOption,
   IonSpinner,
   IonTextarea,
   IonTitle,
@@ -33,6 +40,13 @@ import { ToastService } from "../../services/toast.service";
     IonButtons,
     IonBackButton,
     IonSpinner,
+    IonAccordion,
+    IonAccordionGroup,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonSelect,
+    IonSelectOption,
   ],
   templateUrl: "./survey-create.page.html",
   styleUrls: ["./survey-create.page.scss"],
@@ -44,6 +58,13 @@ export class SurveyCreatePage {
 
   title = "";
   description = "";
+  visibility = "private";
+  privacyMode = "anonymous";
+  resultVisibility = "after_completion";
+  statementOrder = "random";
+  statementCharMin = 20;
+  statementCharMax = 150;
+  closesAt = "";
   submitting = signal(false);
 
   async onSubmit() {
@@ -54,6 +75,13 @@ export class SurveyCreatePage {
       const survey = await this.surveyService.createSurvey({
         title: this.title.trim(),
         description: this.description.trim() || undefined,
+        visibility: this.visibility,
+        privacyMode: this.privacyMode,
+        resultVisibility: this.resultVisibility,
+        statementOrder: this.statementOrder,
+        statementCharMin: this.statementCharMin,
+        statementCharMax: this.statementCharMax,
+        closesAt: this.closesAt ? new Date(this.closesAt).toISOString() : undefined,
       });
       this.router.navigateByUrl(`/survey/${survey.slug}`, { replaceUrl: true });
     } catch (e) {

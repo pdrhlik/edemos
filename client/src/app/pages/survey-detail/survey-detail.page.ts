@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import { Component, inject, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import {
@@ -13,6 +14,13 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonSpinner,
   IonTitle,
   IonToolbar,
 } from "@ionic/angular/standalone";
@@ -49,6 +57,14 @@ import { ToastService } from "../../services/toast.service";
     IonCardContent,
     IonBadge,
     IonIcon,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonSelect,
+    IonSelectOption,
+    IonSpinner,
+    DatePipe,
     SeedStatementsComponent,
     SubmitStatementComponent,
   ],
@@ -69,6 +85,15 @@ export class SurveyDetailPage {
   participant = signal<SurveyParticipant | null>(null);
   pendingCount = signal(0);
 
+  editVisibility = signal("private");
+  editPrivacyMode = signal("anonymous");
+  editResultVisibility = signal("after_completion");
+  editStatementOrder = signal("random");
+  editStatementCharMin = signal(20);
+  editStatementCharMax = signal(150);
+  editClosesAt = signal("");
+  savingSettings = signal(false);
+
   constructor() {
     addIcons({ playOutline, closeOutline, shieldCheckmarkOutline });
   }
@@ -83,6 +108,14 @@ export class SurveyDetailPage {
   async loadSurvey(slug: string) {
     const survey = await this.surveyService.getSurvey(slug);
     this.survey.set(survey);
+
+    this.editVisibility.set(survey.visibility);
+    this.editPrivacyMode.set(survey.privacyMode);
+    this.editResultVisibility.set(survey.resultVisibility);
+    this.editStatementOrder.set(survey.statementOrder);
+    this.editStatementCharMin.set(survey.statementCharMin);
+    this.editStatementCharMax.set(survey.statementCharMax);
+    this.editClosesAt.set(survey.closesAt ?? "");
 
     // Check if current user is a participant
     try {
@@ -107,8 +140,18 @@ export class SurveyDetailPage {
     return this.participant()?.role === "admin";
   }
 
+  get isAdminOrModerator(): boolean {
+    const role = this.participant()?.role;
+    return role === "admin" || role === "moderator";
+  }
+
   get isParticipantOrAdmin(): boolean {
     return this.participant() !== null;
+  }
+
+  settingLabel(prefix: string, value: string): string {
+    const key = `survey.${prefix}-${value.replace(/_/g, "-")}`;
+    return this.translate.instant(key);
   }
 
   statusColor(status: string): string {
@@ -157,6 +200,29 @@ export class SurveyDetailPage {
       this.toast.success("survey.closed-success");
     } catch (e) {
       this.toast.apiError(e);
+    }
+  }
+
+  async saveSettings() {
+    const s = this.survey();
+    if (!s) return;
+    this.savingSettings.set(true);
+    try {
+      const updated = await this.surveyService.updateSurvey(s.slug, {
+        visibility: this.editVisibility(),
+        privacyMode: this.editPrivacyMode(),
+        resultVisibility: this.editResultVisibility(),
+        statementOrder: this.editStatementOrder(),
+        statementCharMin: this.editStatementCharMin(),
+        statementCharMax: this.editStatementCharMax(),
+        closesAt: this.editClosesAt() ? new Date(this.editClosesAt()).toISOString() : undefined,
+      });
+      this.survey.set(updated);
+      this.toast.success("survey.settings-saved");
+    } catch (e) {
+      this.toast.apiError(e);
+    } finally {
+      this.savingSettings.set(false);
     }
   }
 
