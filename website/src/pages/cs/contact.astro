@@ -1,0 +1,9 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ContactContent from "../../components/ContactContent.astro";
+import { t } from "../../i18n/utils";
+const locale = "cs";
+---
+<Layout title={t(locale, "contact.title")} locale={locale}>
+  <ContactContent locale={locale} />
+</Layout>

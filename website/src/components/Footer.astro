@@ -1,0 +1,42 @@
+---
+import { t, localePath } from "../i18n/utils";
+
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-gray-50 border-t border-gray-100">
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    <div class="grid md:grid-cols-3 gap-8">
+      <div>
+        <p class="text-xl font-bold text-primary mb-2">eDemOS</p>
+        <p class="text-sm text-gray-500">{t(locale, "footer.description")}</p>
+      </div>
+
+      <div>
+        <p class="font-semibold text-sm text-gray-700 mb-3">{t(locale, "footer.links")}</p>
+        <div class="flex flex-col gap-2">
+          <a href={localePath(locale, "/")} class="text-sm text-gray-500 hover:text-dark transition">{t(locale, "nav.home")}</a>
+          <a href={localePath(locale, "/about")} class="text-sm text-gray-500 hover:text-dark transition">{t(locale, "nav.about")}</a>
+          <a href={localePath(locale, "/contact")} class="text-sm text-gray-500 hover:text-dark transition">{t(locale, "nav.contact")}</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="font-semibold text-sm text-gray-700 mb-3">eDemOS</p>
+        <div class="flex flex-col gap-2">
+          <a href="https://www.academix.cz/edemos" target="_blank" rel="noopener" class="text-sm text-gray-500 hover:text-dark transition">Academix</a>
+          <a href="https://e-demos.com" class="text-sm text-gray-500 hover:text-dark transition">e-demos.com</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-gray-200 text-center text-xs text-gray-400">
+      &copy; {year} eDemOS. {t(locale, "footer.copyright")}
+    </div>
+  </div>
+</footer>

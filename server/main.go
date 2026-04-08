@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/go-chi/chi/v5"
 	chimw "github.com/go-chi/chi/v5/middleware"
@@ -112,6 +114,35 @@ func main() {
 		r.Post("/api/v1/statement/{id}/response", handler.ErrorHandler(h.SubmitResponse()))
 		r.Get("/api/v1/survey/{slug}/progress", handler.ErrorHandler(h.GetVoteProgress()))
 	})
+
+	// Serve website static files if enabled
+	if cfg.ServeWebsite {
+		websiteDir := cfg.WebsitePath
+		if _, err := os.Stat(websiteDir); err == nil {
+			// Serve static assets (CSS, JS, images)
+			fileServer := http.FileServer(http.Dir(websiteDir))
+
+			// Website routes — serve pre-built HTML files
+			websitePages := []string{"/", "/about", "/contact", "/cs", "/cs/about", "/cs/contact"}
+			for _, page := range websitePages {
+				pagePath := page
+				r.Get(pagePath, func(w http.ResponseWriter, r *http.Request) {
+					htmlFile := filepath.Join(websiteDir, pagePath, "index.html")
+					if pagePath == "/" {
+						htmlFile = filepath.Join(websiteDir, "index.html")
+					}
+					http.ServeFile(w, r, htmlFile)
+				})
+			}
+
+			// Serve static assets under /_astro/ etc
+			r.Handle("/*", fileServer)
+
+			log.Printf("serving website from %s", websiteDir)
+		} else {
+			log.Printf("SERVE_WEBSITE=true but website directory not found: %s", websiteDir)
+		}
+	}
 
 	log.Println("server listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", r))

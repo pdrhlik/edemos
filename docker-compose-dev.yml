@@ -64,6 +64,22 @@ services:
     depends_on:
       - server
 
+  website:
+    build:
+      context: ./website
+      dockerfile: Dockerfile.dev
+    container_name: edemos-website
+    restart: unless-stopped
+    environment:
+      PUBLIC_APP_URL: ${BASE_URL}
+    volumes:
+      - ./website/src:/app/src
+      - ./website/astro.config.mjs:/app/astro.config.mjs
+    ports:
+      - "127.0.0.1:4321:4321"
+    networks:
+      - edemos
+
   adminer:
     image: adminer
     container_name: edemos-adminer

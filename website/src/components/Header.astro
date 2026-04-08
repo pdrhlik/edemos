@@ -1,0 +1,43 @@
+---
+import { t, localePath, appLink, switchLocalePath } from "../i18n/utils";
+
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props;
+const altLocale = locale === "en" ? "cs" : "en";
+const altLabel = locale === "en" ? "CZ" : "EN";
+---
+
+<header class="border-b border-gray-100">
+  <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href={localePath(locale, "/")} class="text-xl font-bold text-primary">
+      eDemOS
+    </a>
+
+    <div class="hidden md:flex items-center gap-6">
+      <a href={localePath(locale, "/")} class="text-sm text-gray-600 hover:text-dark transition">{t(locale, "nav.home")}</a>
+      <a href={localePath(locale, "/about")} class="text-sm text-gray-600 hover:text-dark transition">{t(locale, "nav.about")}</a>
+      <a href={localePath(locale, "/contact")} class="text-sm text-gray-600 hover:text-dark transition">{t(locale, "nav.contact")}</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={switchLocalePath(Astro.url, altLocale)}
+        class="text-xs font-medium text-gray-500 hover:text-dark border border-gray-200 rounded px-2 py-1 transition"
+      >
+        {altLabel}
+      </a>
+      <a href={appLink("/login")} class="text-sm text-gray-600 hover:text-dark transition">
+        {t(locale, "nav.login")}
+      </a>
+      <a
+        href={appLink("/register")}
+        class="text-sm bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition"
+      >
+        {t(locale, "nav.register")}
+      </a>
+    </div>
+  </nav>
+</header>

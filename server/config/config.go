@@ -14,9 +14,16 @@ type Config struct {
 	SMTPPassword string
 	SMTPFrom     string
 	BaseURL      string
+	ServeWebsite bool
+	WebsitePath  string
 }
 
 func Load() Config {
+	websitePath := os.Getenv("WEBSITE_PATH")
+	if websitePath == "" {
+		websitePath = "website/dist"
+	}
+
 	c := Config{
 		DBDSN:        os.Getenv("DB_DSN"),
 		JWTSecret:    os.Getenv("JWT_SECRET"),
@@ -26,6 +33,8 @@ func Load() Config {
 		SMTPPassword: os.Getenv("SMTP_PASSWORD"),
 		SMTPFrom:     os.Getenv("SMTP_FROM"),
 		BaseURL:      os.Getenv("BASE_URL"),
+		ServeWebsite: os.Getenv("SERVE_WEBSITE") == "true",
+		WebsitePath:  websitePath,
 	}
 	if c.DBDSN == "" {
 		log.Fatal("Set DB_DSN env to start server")

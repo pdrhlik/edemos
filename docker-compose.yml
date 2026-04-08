@@ -18,8 +18,8 @@ services:
 
   server:
     build:
-      context: ./server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.server
     container_name: edemos-server
     restart: unless-stopped
     environment:
@@ -31,6 +31,8 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       SMTP_FROM: ${SMTP_FROM}
       BASE_URL: ${BASE_URL}
+      SERVE_WEBSITE: ${SERVE_WEBSITE:-true}
+      WEBSITE_PATH: /app/website
     ports:
       - "127.0.0.1:8080:8080"
     networks:

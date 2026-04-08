@@ -1,0 +1,104 @@
+---
+import { t, appLink } from "../i18n/utils";
+
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props;
+---
+
+<!-- Hero -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5"></div>
+  <div class="relative max-w-6xl mx-auto px-6 py-24 md:py-32 text-center">
+    <h1 class="text-4xl md:text-6xl font-extrabold text-dark leading-tight mb-6">
+      {t(locale, "hero.title")}
+    </h1>
+    <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
+      {t(locale, "hero.subtitle")}
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a
+        href={appLink("/register")}
+        class="bg-primary text-white px-8 py-3 rounded-xl text-lg font-semibold hover:bg-primary-dark transition shadow-lg shadow-primary/25"
+      >
+        {t(locale, "hero.cta-primary")}
+      </a>
+      <a
+        href={appLink("/surveys")}
+        class="bg-white text-dark px-8 py-3 rounded-xl text-lg font-semibold border border-gray-200 hover:border-gray-300 transition"
+      >
+        {t(locale, "hero.cta-secondary")}
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl md:text-4xl font-bold text-center text-dark mb-14">
+      {t(locale, "features.title")}
+    </h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {[
+        { icon: "check-circle", key: "vote" },
+        { icon: "plus-circle", key: "submit" },
+        { icon: "bar-chart", key: "results" },
+        { icon: "shield", key: "moderate" },
+      ].map((f) => (
+        <div class="text-center p-6">
+          <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div class="w-7 h-7 bg-primary rounded-lg"></div>
+          </div>
+          <h3 class="font-semibold text-lg text-dark mb-2">
+            {t(locale, `features.${f.key}-title`)}
+          </h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            {t(locale, `features.${f.key}-desc`)}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Use cases -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl md:text-4xl font-bold text-center text-dark mb-14">
+      {t(locale, "usecases.title")}
+    </h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      {["civic", "research", "org"].map((key) => (
+        <div class="bg-white p-8 rounded-2xl border border-gray-100 hover:border-primary/30 transition">
+          <h3 class="font-semibold text-lg text-dark mb-3">
+            {t(locale, `usecases.${key}`)}
+          </h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            {t(locale, `usecases.${key}-desc`)}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">
+      {t(locale, "cta.title")}
+    </h2>
+    <p class="text-lg text-gray-500 mb-8">
+      {t(locale, "cta.subtitle")}
+    </p>
+    <a
+      href={appLink("/register")}
+      class="inline-block bg-primary text-white px-10 py-4 rounded-xl text-lg font-semibold hover:bg-primary-dark transition shadow-lg shadow-primary/25"
+    >
+      {t(locale, "cta.button")}
+    </a>
+  </div>
+</section>

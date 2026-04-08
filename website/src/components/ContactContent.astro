@@ -1,0 +1,64 @@
+---
+import { t } from "../i18n/utils";
+
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props;
+---
+
+<section class="py-20">
+  <div class="max-w-3xl mx-auto px-6">
+    <h1 class="text-4xl font-extrabold text-dark mb-8">{t(locale, "contact.title")}</h1>
+
+    <p class="text-lg text-gray-600 leading-relaxed mb-10">
+      {t(locale, "contact.intro")}
+    </p>
+
+    <div class="grid gap-6">
+      <a
+        href="mailto:info@e-demos.com"
+        class="flex items-center gap-4 p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-primary/30 transition"
+      >
+        <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
+          <span class="text-primary text-xl">@</span>
+        </div>
+        <div>
+          <p class="font-semibold text-dark">{t(locale, "contact.email-label")}</p>
+          <p class="text-sm text-gray-500">info@e-demos.com</p>
+        </div>
+      </a>
+
+      <a
+        href="https://github.com/pdrhlik/edemos"
+        target="_blank"
+        rel="noopener"
+        class="flex items-center gap-4 p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-primary/30 transition"
+      >
+        <div class="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center shrink-0">
+          <span class="text-dark text-xl font-bold">&lt;/&gt;</span>
+        </div>
+        <div>
+          <p class="font-semibold text-dark">{t(locale, "contact.github-label")}</p>
+          <p class="text-sm text-gray-500">github.com/pdrhlik/edemos</p>
+        </div>
+      </a>
+
+      <a
+        href="https://www.academix.cz/edemos"
+        target="_blank"
+        rel="noopener"
+        class="flex items-center gap-4 p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-primary/30 transition"
+      >
+        <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center shrink-0">
+          <span class="text-accent text-xl font-bold">A</span>
+        </div>
+        <div>
+          <p class="font-semibold text-dark">{t(locale, "contact.web-label")}</p>
+          <p class="text-sm text-gray-500">academix.cz/edemos</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
