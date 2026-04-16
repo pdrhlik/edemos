@@ -51,6 +51,17 @@ services:
     networks:
       - edemos
 
+  adminer:
+    image: adminer:5-standalone
+    container_name: edemos-adminer
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4281:8080"
+    networks:
+      - edemos
+    depends_on:
+      - mariadb
+
 networks:
   edemos:
     driver: bridge

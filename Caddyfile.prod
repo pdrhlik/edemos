@@ -1,3 +1,7 @@
+a.edemos.patrio.dev {
+	reverse_proxy localhost:4281
+}
+
 edemos.patrio.dev {
 	# API routes → Go server
 	handle /api/* {
