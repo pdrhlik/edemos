@@ -18,6 +18,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonSpinner,
+  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/angular/standalone";
@@ -26,6 +27,7 @@ import { addIcons } from "ionicons";
 import {
   barChartOutline,
   chatbubblesOutline,
+  checkmarkOutline,
   closeOutline,
   handLeftOutline,
   informationCircleOutline,
@@ -41,6 +43,7 @@ import { ParticipantsComponent } from "../../components/participants/participant
 import { SurveyResultsComponent } from "../../components/survey-results/survey-results.component";
 import { SeedStatementsComponent } from "../../components/seed-statements/seed-statements.component";
 import { SubmitStatementComponent } from "../../components/submit-statement/submit-statement.component";
+import { Statement } from "../../models/statement.model";
 import { SurveyParticipant } from "../../models/participant.model";
 import { Survey } from "../../models/survey.model";
 import { ApiService } from "../../services/api.service";
@@ -73,6 +76,7 @@ import { ToastService } from "../../services/toast.service";
     IonSelect,
     IonSelectOption,
     IonSpinner,
+    IonText,
     DatePipe,
     IntakeConfigBuilderComponent,
     ParticipantsComponent,
@@ -98,6 +102,7 @@ export class SurveyDetailPage {
   survey = signal<Survey | null>(null);
   participant = signal<SurveyParticipant | null>(null);
   pendingCount = signal(0);
+  moderationQueue = signal<Statement[]>([]);
   voteProgress = signal<VoteProgress>({ voted: 0, total: 0 });
   activeSegment = signal<string>("overview");
 
@@ -122,6 +127,7 @@ export class SurveyDetailPage {
       settingsOutline,
       peopleOutline,
       playOutline,
+      checkmarkOutline,
       closeOutline,
       barChartOutline,
     });
@@ -162,10 +168,11 @@ export class SurveyDetailPage {
         } catch {}
       }
 
-      // Load pending moderation count for admins/moderators
+      // Load moderation queue for admins/moderators
       if (p.role === "admin" || p.role === "moderator") {
         try {
           const queue = await this.moderationService.getQueue(slug);
+          this.moderationQueue.set(queue);
           this.pendingCount.set(queue.length);
         } catch {}
       }
@@ -267,6 +274,17 @@ export class SurveyDetailPage {
       this.toast.apiError(e);
     } finally {
       this.joining.set(false);
+    }
+  }
+
+  async moderateStatement(st: Statement, status: "approved" | "rejected") {
+    try {
+      await this.moderationService.moderate(st.id, status);
+      this.moderationQueue.update((q) => q.filter((s) => s.id !== st.id));
+      this.pendingCount.set(this.moderationQueue().length);
+      this.toast.success(status === "approved" ? "moderation.approved" : "moderation.rejected");
+    } catch (e) {
+      this.toast.apiError(e);
     }
   }
 

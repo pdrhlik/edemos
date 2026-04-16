@@ -73,7 +73,7 @@ func (s *Store) ListPublicSurveys(ctx context.Context, userID uint) ([]model.Sur
 			s.created_at
 		FROM survey s
 		WHERE s.status = 'active'
-			AND s.visibility IN ('public', 'unlisted')
+			AND s.visibility = 'public'
 			AND s.id NOT IN (
 				SELECT sp.survey_id FROM survey_participant sp WHERE sp.user_id = ?
 			)

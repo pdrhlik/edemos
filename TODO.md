@@ -4,14 +4,6 @@
 
 - **Server error messages are raw English strings.** They appear in toasts via `apiError()`. Need a system where server returns error codes and client maps them to i18n keys. Currently ~70 `writeError()` calls with hardcoded English. Temporary fix: at least make them proper sentences with periods.
 
-- ~~**Spacing/alignment inconsistencies across pages.**~~ DONE — Replaced `ion-card` and `ion-list > ion-item` with custom `.content-card` / `.readonly-field` / `.survey-card` divs everywhere. All inputs use `fill="outline"`, all containers use 600px max-width. Consistent card pattern: `background: var(--ion-color-light)`, `border-radius: 8px`, `padding: 0.75-1rem`.
-
-- ~~**Survey detail page admin buttons**~~ DONE — Moved activate/close buttons to the settings tab.
-
-- ~~**Double join step for public surveys.**~~ DONE — Join button on survey detail now calls the API directly if no intake form. Only navigates to join page when intake fields are present.
-
-- **Dates not reflecting current language.** The `DatePipe` with `locale` param was added to some pages but not all. The `LocaleService` registers locale data but Angular's `LOCALE_ID` is set at bootstrap and doesn't change dynamically. Every `| date` pipe needs the `:locale` suffix, or use a shared helper/pipe.
-
 ### P1 — Important UX improvements
 
 - **Intake config builder UX is terrible.** Cards inside cards, tiny inputs, no visual hierarchy. Research how Typeform, Google Forms, SurveyMonkey handle form builders. Consider: slides/stepper pattern, drag-and-drop via CDK, collapsible field editors, inline previews. This needs a full redesign, not incremental fixes.
@@ -27,8 +19,6 @@
 - **Result visibility enforcement on client.** The server guards results based on `resultVisibility` setting, but the client always shows the Results tab. When the server returns 403, the tab should be grayed out / show a message. Admins should always see results regardless.
 
 ### P2 — Functional gaps
-
-- **Unlisted visibility** — what does it mean? Currently `ListPublicSurveys` includes both `public` and `unlisted`. The intended behavior: unlisted surveys are accessible by direct link but don't appear in the public browse list. Need to exclude `unlisted` from the public list query.
 
 - **Privacy modes** — `anonymous`, `public`, `participant_choice` are stored but never enforced. Results don't show who voted what (effectively always anonymous). When `public` mode is implemented, results should show individual voter names. `participant_choice` would let each participant decide.
 

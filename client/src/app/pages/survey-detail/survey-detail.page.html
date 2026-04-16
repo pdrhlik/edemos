@@ -33,12 +33,13 @@
         <ion-icon name="bar-chart-outline"></ion-icon>
         <ion-label>{{ "results.results" | translate }}</ion-label>
       </ion-segment-button>
-      } @if (isAdminOrModerator && pendingCount() > 0) {
+      } @if (isAdminOrModerator) {
       <ion-segment-button value="moderation">
         <ion-icon name="shield-checkmark-outline"></ion-icon>
-        <ion-label
-          >{{ "moderation.queue" | translate }}
+        <ion-label>
+          {{ "moderation.queue" | translate }} @if (pendingCount() > 0) {
           <ion-badge color="warning" class="segment-badge">{{ pendingCount() }}</ion-badge>
+          }
         </ion-label>
       </ion-segment-button>
       } @if (isAdmin) {
@@ -108,6 +109,16 @@
         } @else { {{ "survey.join" | translate }} }
       </ion-button>
     </div>
+    }
+
+    <!-- Submit statement after voting (overview) -->
+    @if (isParticipantOrAdmin && s.status === "active" && allVoted) {
+    <app-submit-statement
+      [surveySlug]="s.slug"
+      [charMin]="s.statementCharMin"
+      [charMax]="s.statementCharMax"
+      (statementSubmitted)="loadSurvey(s.slug)"
+    ></app-submit-statement>
     } }
 
     <!-- STATEMENTS (admin, draft) -->
@@ -157,13 +168,37 @@
     }
 
     <!-- MODERATION -->
-    @if (activeSegment() === "moderation") {
-    <ion-button expand="block" [routerLink]="'/survey/' + s.slug + '/moderation'">
-      <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
-      {{ "moderation.queue" | translate }}
-      <ion-badge slot="end" color="warning">{{ pendingCount() }}</ion-badge>
-    </ion-button>
-    }
+    @if (activeSegment() === "moderation") { @if (moderationQueue().length === 0) {
+    <div class="empty-state">
+      <ion-text color="medium">
+        <p>{{ "moderation.no-pending" | translate }}</p>
+      </ion-text>
+    </div>
+    } @else { @for (st of moderationQueue(); track st.id) {
+    <div class="moderation-card">
+      <p class="statement-text">{{ st.text }}</p>
+      <div class="action-buttons">
+        <ion-button
+          color="success"
+          fill="outline"
+          size="small"
+          (click)="moderateStatement(st, 'approved')"
+        >
+          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+          {{ "moderation.approve" | translate }}
+        </ion-button>
+        <ion-button
+          color="danger"
+          fill="outline"
+          size="small"
+          (click)="moderateStatement(st, 'rejected')"
+        >
+          <ion-icon name="close-outline" slot="start"></ion-icon>
+          {{ "moderation.reject" | translate }}
+        </ion-button>
+      </div>
+    </div>
+    } } }
 
     <!-- SETTINGS (admin) -->
     @if (activeSegment() === "settings") {
