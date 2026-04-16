@@ -11,139 +11,125 @@
   <div class="settings-container">
     <!-- Profile section -->
     @if (user; as u) {
-    <ion-list-header>
-      <ion-label>
+    <div class="section">
+      <h2 class="section-title">
         <ion-icon name="person-outline"></ion-icon>
         {{ "profile.profile" | translate }}
-      </ion-label>
-    </ion-list-header>
-    <ion-list>
-      <ion-item>
-        <ion-input
-          labelPlacement="stacked"
-          [label]="'profile.name' | translate"
-          [(ngModel)]="editName"
-          name="editName"
-        ></ion-input>
-      </ion-item>
-      <ion-item class="readonly-item">
-        <ion-label>
-          <p>{{ "profile.email" | translate }}</p>
-          <h3>{{ u.email }}</h3>
-        </ion-label>
-      </ion-item>
-      <ion-item class="readonly-item">
-        <ion-label>
-          <p>{{ "profile.member-since" | translate }}</p>
-          <h3>{{ u.createdAt | date: "mediumDate" }}</h3>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-    <ion-button expand="block" (click)="saveProfile()" [disabled]="savingProfile()">
-      @if (savingProfile()) {
-      <ion-spinner name="crescent"></ion-spinner>
-      } @else { {{ "common.save" | translate }} }
-    </ion-button>
+      </h2>
+
+      <ion-input
+        labelPlacement="stacked"
+        fill="outline"
+        [label]="'profile.name' | translate"
+        [(ngModel)]="editName"
+        name="editName"
+      ></ion-input>
+
+      <div class="readonly-field">
+        <span class="readonly-label">{{ "profile.email" | translate }}</span>
+        <span class="readonly-value">{{ u.email }}</span>
+      </div>
+
+      <div class="readonly-field">
+        <span class="readonly-label">{{ "profile.member-since" | translate }}</span>
+        <span class="readonly-value">{{ u.createdAt | date: "mediumDate":"":locale }}</span>
+      </div>
+
+      <ion-button expand="block" (click)="saveProfile()" [disabled]="savingProfile()">
+        @if (savingProfile()) {
+        <ion-spinner name="crescent"></ion-spinner>
+        } @else { {{ "common.save" | translate }} }
+      </ion-button>
+    </div>
     }
 
     <!-- Appearance section -->
-    <ion-list-header>
-      <ion-label>
+    <div class="section">
+      <h2 class="section-title">
         <ion-icon name="color-palette-outline"></ion-icon>
         {{ "settings.appearance" | translate }}
-      </ion-label>
-    </ion-list-header>
-    <ion-list>
-      <ion-item>
-        <ion-select
-          [label]="'language.language' | translate"
-          labelPlacement="stacked"
-          [value]="currentLang()"
-          (ionChange)="onLanguageChange($event)"
-          interface="popover"
-        >
-          <ion-select-option value="en">{{ "language.english" | translate }}</ion-select-option>
-          <ion-select-option value="cs">{{ "language.czech" | translate }}</ion-select-option>
-        </ion-select>
-      </ion-item>
+      </h2>
 
-      <ion-item>
-        <ion-select
-          [label]="'settings.theme' | translate"
-          labelPlacement="stacked"
-          [value]="themeService.mode()"
-          (ionChange)="onThemeChange($event)"
-          interface="popover"
+      <ion-select
+        [label]="'language.language' | translate"
+        labelPlacement="stacked"
+        fill="outline"
+        [value]="currentLang()"
+        (ionChange)="onLanguageChange($event)"
+        interface="popover"
+      >
+        <ion-select-option value="en">{{ "language.english" | translate }}</ion-select-option>
+        <ion-select-option value="cs">{{ "language.czech" | translate }}</ion-select-option>
+      </ion-select>
+
+      <ion-select
+        [label]="'settings.theme' | translate"
+        labelPlacement="stacked"
+        fill="outline"
+        [value]="themeService.mode()"
+        (ionChange)="onThemeChange($event)"
+        interface="popover"
+      >
+        <ion-select-option value="auto">{{ "settings.theme-auto" | translate }}</ion-select-option>
+        <ion-select-option value="light"
+          >{{ "settings.theme-light" | translate }}</ion-select-option
         >
-          <ion-select-option value="auto"
-            >{{ "settings.theme-auto" | translate }}</ion-select-option
-          >
-          <ion-select-option value="light"
-            >{{ "settings.theme-light" | translate }}</ion-select-option
-          >
-          <ion-select-option value="dark"
-            >{{ "settings.theme-dark" | translate }}</ion-select-option
-          >
-        </ion-select>
-      </ion-item>
-    </ion-list>
+        <ion-select-option value="dark">{{ "settings.theme-dark" | translate }}</ion-select-option>
+      </ion-select>
+    </div>
 
     <!-- Password section -->
     @if (user; as u) {
-    <ion-list-header>
-      <ion-label>
+    <div class="section">
+      <h2 class="section-title">
         <ion-icon name="lock-closed-outline"></ion-icon>
         {{ "profile.password" | translate }}
-      </ion-label>
-    </ion-list-header>
+      </h2>
 
-    @if (!u.hasPassword) {
-    <ion-note class="password-hint">{{ "profile.set-password-hint" | translate }}</ion-note>
-    }
-
-    <ion-list>
-      @if (u.hasPassword) {
-      <ion-item>
-        <ion-input
-          type="password"
-          labelPlacement="stacked"
-          [label]="'profile.current-password' | translate"
-          [(ngModel)]="currentPassword"
-          name="currentPassword"
-        ></ion-input>
-      </ion-item>
+      @if (!u.hasPassword) {
+      <p class="hint-text">{{ "profile.set-password-hint" | translate }}</p>
+      } @if (u.hasPassword) {
+      <ion-input
+        type="password"
+        labelPlacement="stacked"
+        fill="outline"
+        [label]="'profile.current-password' | translate"
+        [(ngModel)]="currentPassword"
+        name="currentPassword"
+      ></ion-input>
       }
-      <ion-item>
-        <ion-input
-          type="password"
-          labelPlacement="stacked"
-          [label]="'profile.new-password' | translate"
-          [(ngModel)]="newPassword"
-          name="newPassword"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input
-          type="password"
-          labelPlacement="stacked"
-          [label]="'profile.confirm-new-password' | translate"
-          [(ngModel)]="confirmNewPassword"
-          name="confirmNewPassword"
-        ></ion-input>
-      </ion-item>
-    </ion-list>
 
-    <ion-button expand="block" (click)="savePassword()" [disabled]="savingPassword()">
-      @if (savingPassword()) {
-      <ion-spinner name="crescent"></ion-spinner>
-      } @else if (u.hasPassword) { {{ "profile.change-password" | translate }} } @else { {{
-      "profile.set-password" | translate }} }
-    </ion-button>
+      <ion-input
+        type="password"
+        labelPlacement="stacked"
+        fill="outline"
+        [label]="'profile.new-password' | translate"
+        [(ngModel)]="newPassword"
+        name="newPassword"
+      ></ion-input>
 
-    @if (u.hasPassword) {
-    <p class="forgot-link">
-      <a (click)="forgotPassword()">{{ "profile.forgot-password" | translate }}</a>
-    </p>
-    } }
+      <ion-input
+        type="password"
+        labelPlacement="stacked"
+        fill="outline"
+        [label]="'profile.confirm-new-password' | translate"
+        [(ngModel)]="confirmNewPassword"
+        name="confirmNewPassword"
+      ></ion-input>
+
+      <ion-button expand="block" (click)="savePassword()" [disabled]="savingPassword()">
+        @if (savingPassword()) {
+        <ion-spinner name="crescent"></ion-spinner>
+        } @else if (u.hasPassword) { {{ "profile.change-password" | translate }} } @else { {{
+        "profile.set-password" | translate }} }
+      </ion-button>
+
+      @if (u.hasPassword) {
+      <p class="forgot-link">
+        <a (click)="forgotPassword()">{{ "profile.forgot-password" | translate }}</a>
+      </p>
+      }
+    </div>
+    }
   </div>
 </ion-content>

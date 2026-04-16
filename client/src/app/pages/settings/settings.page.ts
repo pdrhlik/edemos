@@ -8,12 +8,7 @@ import {
   IonHeader,
   IonIcon,
   IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonListHeader,
   IonMenuButton,
-  IonNote,
   IonSelect,
   IonSelectOption,
   IonSpinner,
@@ -41,12 +36,7 @@ import { ToastService } from "../../services/toast.service";
     IonContent,
     IonButtons,
     IonMenuButton,
-    IonList,
-    IonListHeader,
-    IonItem,
-    IonLabel,
     IonInput,
-    IonNote,
     IonSelect,
     IonSelectOption,
     IonButton,
@@ -76,6 +66,10 @@ export class SettingsPage implements OnInit {
 
   get user() {
     return this.auth.currentUser();
+  }
+
+  get locale(): string {
+    return this.localeService.currentLang();
   }
 
   ngOnInit() {
