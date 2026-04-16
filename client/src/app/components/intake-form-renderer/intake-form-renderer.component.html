@@ -6,6 +6,7 @@
           <ion-input
             type="text"
             labelPlacement="stacked"
+            mode="md"
             fill="outline"
             [label]="getLabel(field.label) + (field.required ? ' *' : '')"
             [placeholder]="getPlaceholder(field)"
@@ -18,6 +19,7 @@
         <ion-item>
           <ion-select
             labelPlacement="stacked"
+            mode="md"
             fill="outline"
             [label]="getLabel(field.label) + (field.required ? ' *' : '')"
             [value]="formData()[field.id] || ''"

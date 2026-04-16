@@ -219,6 +219,7 @@
       <ion-select
         [label]="'survey.visibility' | translate"
         labelPlacement="stacked"
+        mode="md"
         fill="outline"
         [value]="editVisibility()"
         (ionChange)="editVisibility.set($event.detail.value)"
@@ -238,6 +239,7 @@
       <ion-select
         [label]="'survey.privacy-mode' | translate"
         labelPlacement="stacked"
+        mode="md"
         fill="outline"
         [value]="editPrivacyMode()"
         (ionChange)="editPrivacyMode.set($event.detail.value)"
@@ -257,6 +259,7 @@
       <ion-select
         [label]="'survey.result-visibility' | translate"
         labelPlacement="stacked"
+        mode="md"
         fill="outline"
         [value]="editResultVisibility()"
         (ionChange)="editResultVisibility.set($event.detail.value)"
@@ -276,6 +279,7 @@
       <ion-select
         [label]="'survey.statement-order' | translate"
         labelPlacement="stacked"
+        mode="md"
         fill="outline"
         [value]="editStatementOrder()"
         (ionChange)="editStatementOrder.set($event.detail.value)"
@@ -295,6 +299,7 @@
       <ion-input
         type="number"
         labelPlacement="stacked"
+        mode="md"
         fill="outline"
         [label]="'survey.statement-char-min' | translate"
         [value]="editStatementCharMin()"
@@ -305,6 +310,7 @@
       <ion-input
         type="number"
         labelPlacement="stacked"
+        mode="md"
         fill="outline"
         [label]="'survey.statement-char-max' | translate"
         [value]="editStatementCharMax()"
@@ -315,6 +321,7 @@
       <ion-input
         type="datetime-local"
         labelPlacement="stacked"
+        mode="md"
         fill="outline"
         [label]="'survey.closes-at' | translate"
         [value]="editClosesAt()"

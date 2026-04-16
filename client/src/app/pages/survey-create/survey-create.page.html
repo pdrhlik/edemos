@@ -13,6 +13,7 @@
       <ion-input
         type="text"
         labelPlacement="stacked"
+        mode="md"
         fill="outline"
         [(ngModel)]="title"
         name="title"
@@ -21,6 +22,7 @@
 
       <ion-textarea
         labelPlacement="stacked"
+        mode="md"
         fill="outline"
         [(ngModel)]="description"
         name="description"
@@ -38,6 +40,7 @@
             <ion-select
               [label]="'survey.visibility' | translate"
               labelPlacement="stacked"
+              mode="md"
               fill="outline"
               [(ngModel)]="visibility"
               name="visibility"
@@ -57,6 +60,7 @@
             <ion-select
               [label]="'survey.privacy-mode' | translate"
               labelPlacement="stacked"
+              mode="md"
               fill="outline"
               [(ngModel)]="privacyMode"
               name="privacyMode"
@@ -76,6 +80,7 @@
             <ion-select
               [label]="'survey.result-visibility' | translate"
               labelPlacement="stacked"
+              mode="md"
               fill="outline"
               [(ngModel)]="resultVisibility"
               name="resultVisibility"
@@ -95,6 +100,7 @@
             <ion-select
               [label]="'survey.statement-order' | translate"
               labelPlacement="stacked"
+              mode="md"
               fill="outline"
               [(ngModel)]="statementOrder"
               name="statementOrder"
@@ -114,6 +120,7 @@
             <ion-input
               type="number"
               labelPlacement="stacked"
+              mode="md"
               fill="outline"
               [label]="'survey.statement-char-min' | translate"
               [(ngModel)]="statementCharMin"
@@ -124,6 +131,7 @@
             <ion-input
               type="number"
               labelPlacement="stacked"
+              mode="md"
               fill="outline"
               [label]="'survey.statement-char-max' | translate"
               [(ngModel)]="statementCharMax"
@@ -134,6 +142,7 @@
             <ion-input
               type="datetime-local"
               labelPlacement="stacked"
+              mode="md"
               fill="outline"
               [label]="'survey.closes-at' | translate"
               [(ngModel)]="closesAt"
