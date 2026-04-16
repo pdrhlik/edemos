@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { Component, inject, signal } from "@angular/core";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import {
   AlertController,
   IonBackButton,
@@ -85,6 +85,7 @@ import { ToastService } from "../../services/toast.service";
 })
 export class SurveyDetailPage {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private surveyService = inject(SurveyService);
   private translate = inject(TranslateService);
   private alertController = inject(AlertController);
@@ -99,6 +100,8 @@ export class SurveyDetailPage {
   pendingCount = signal(0);
   voteProgress = signal<VoteProgress>({ voted: 0, total: 0 });
   activeSegment = signal<string>("overview");
+
+  joining = signal(false);
 
   editVisibility = signal("private");
   editPrivacyMode = signal("anonymous");
@@ -244,6 +247,26 @@ export class SurveyDetailPage {
       this.toast.success("survey.closed-success");
     } catch (e) {
       this.toast.apiError(e);
+    }
+  }
+
+  async joinSurvey() {
+    const s = this.survey();
+    if (!s) return;
+
+    if (s.intakeConfig?.fields?.length) {
+      this.router.navigateByUrl(`/survey/${s.slug}/join`);
+      return;
+    }
+
+    this.joining.set(true);
+    try {
+      await firstValueFrom(this.api.post(`/survey/${s.slug}/join`, { intakeData: null }));
+      await this.loadSurvey(s.slug);
+    } catch (e) {
+      this.toast.apiError(e);
+    } finally {
+      this.joining.set(false);
     }
   }
 

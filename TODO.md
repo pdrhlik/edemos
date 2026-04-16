@@ -8,7 +8,7 @@
 
 - ~~**Survey detail page admin buttons**~~ DONE — Moved activate/close buttons to the settings tab.
 
-- **Double join step for public surveys.** Survey detail shows a "Join" button that navigates to `/survey/:slug/join` which then shows another join button. For surveys without an intake form, joining should be a single click. Only show the join page if there's an intake form to fill out.
+- ~~**Double join step for public surveys.**~~ DONE — Join button on survey detail now calls the API directly if no intake form. Only navigates to join page when intake fields are present.
 
 - **Dates not reflecting current language.** The `DatePipe` with `locale` param was added to some pages but not all. The `LocaleService` registers locale data but Angular's `LOCALE_ID` is set at bootstrap and doesn't change dynamically. Every `| date` pipe needs the `:locale` suffix, or use a shared helper/pipe.
 

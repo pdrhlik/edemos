@@ -102,8 +102,10 @@
     <!-- Join button for non-participants -->
     @if (!isParticipantOrAdmin && s.status === "active") {
     <div class="content-card">
-      <ion-button expand="block" [routerLink]="'/survey/' + s.slug + '/join'">
-        {{ "survey.join" | translate }}
+      <ion-button expand="block" (click)="joinSurvey()" [disabled]="joining()">
+        @if (joining()) {
+        <ion-spinner name="crescent"></ion-spinner>
+        } @else { {{ "survey.join" | translate }} }
       </ion-button>
     </div>
     } }
