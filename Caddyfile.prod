@@ -1,0 +1,19 @@
+edemos.patrio.dev {
+	# API routes → Go server
+	handle /api/* {
+		reverse_proxy localhost:8180
+	}
+
+	# Website (Astro) routes → Go server (serves static HTML)
+	@website {
+		path / /about /contact /cs /cs/* /_astro/*
+	}
+	handle @website {
+		reverse_proxy localhost:8180
+	}
+
+	# Everything else → Angular SPA
+	handle {
+		reverse_proxy localhost:4280
+	}
+}

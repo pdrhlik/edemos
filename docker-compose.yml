@@ -12,7 +12,7 @@ services:
       - mariadb-data:/var/lib/mysql
       - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
     ports:
-      - "127.0.0.1:3306:3306"
+      - "127.0.0.1:3407:3306"
     networks:
       - edemos
 
@@ -34,7 +34,7 @@ services:
       SERVE_WEBSITE: ${SERVE_WEBSITE:-true}
       WEBSITE_PATH: /app/website
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8180:8080"
     networks:
       - edemos
     depends_on:
@@ -47,7 +47,7 @@ services:
     container_name: edemos-client
     restart: unless-stopped
     ports:
-      - "127.0.0.1:4200:80"
+      - "127.0.0.1:4280:80"
     networks:
       - edemos
 
